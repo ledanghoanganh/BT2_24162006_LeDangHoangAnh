@@ -7,7 +7,7 @@ import baitap2.entity.Video;
 
 public class Test {
 	public static void main(String[] args) {
-		EntityManager enma = JpaConfig.getEntityManager();
+		EntityManager enma = JPAConfig.getEntityManager();
 		EntityTransaction trans = enma.getTransaction();
 		
 		Category cate = new Category();

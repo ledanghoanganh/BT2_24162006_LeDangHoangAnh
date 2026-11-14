@@ -1,81 +1,72 @@
 package baitap2.service.impl;
 
-import java.io.File;
 import java.util.List;
 
-import baitap2.config.Constant;
-import baitap2.dao.CategoryDao;
-import baitap2.dao.impl.CategoryDaoImpl;
-import baitap2.model.Category;
-import baitap2.service.CategoryService;
+import baitap2.dao.ICategoryDao;
+import baitap2.dao.impl.CategoryDao;
+import baitap2.entity.Category;
+import baitap2.service.ICategoryService;
 
-public class CategoryServiceImpl implements CategoryService {
-	CategoryDao categoryDao = new CategoryDaoImpl();
+public class CategoryServiceImpl implements ICategoryService {
+	public ICategoryDao cateDao = new CategoryDao();
 
 	@Override
-	public void insert(Category category) {
-		categoryDao.insert(category);
+	public List<Category> findAll() {
+		return cateDao.findAll();
 	}
 
 	@Override
-	public void edit(Category newCategory) {
-		Category oldCategory = categoryDao.get(newCategory.getId());
-		if (oldCategory != null) {
-			oldCategory.setName(newCategory.getName());
-			if (newCategory.getIcon() != null && !newCategory.getIcon().isEmpty()) {
-				// XOA ANH CU DI (neu co va khac anh mac dinh)
-				String fileName = oldCategory.getIcon();
-				if (fileName != null && !fileName.isEmpty() && !fileName.equals("avata.png")) {
-					File file = new File(Constant.UPLOAD_DIRECTORY + "/" + fileName);
-					if (file.exists()) {
-						file.delete();
-					}
-				}
-				oldCategory.setIcon(newCategory.getIcon());
-			}
-			categoryDao.edit(oldCategory);
+	public Category findById(int id) {
+		return cateDao.findById(id);
+	}
+
+	@Override
+	public List<Category> searchByName(String keyword) {
+		return cateDao.searchByName(keyword);
+	}
+
+	@Override
+	public void insert(Category category) {
+		Category cate = this.findByCategoryname(category.getCategoryname());
+		if (cate == null) {
+			cateDao.insert(category);
 		}
 	}
 
 	@Override
 	public void update(Category category) {
-		edit(category);
+		Category cate = this.findById(category.getCategoryid());
+		if (cate != null) {
+			cateDao.update(category);
+		}
 	}
 
 	@Override
 	public void delete(int id) {
-		Category category = categoryDao.get(id);
-		if (category != null && category.getIcon() != null && !category.getIcon().equals("avata.png")) {
-			File file = new File(Constant.UPLOAD_DIRECTORY + "/" + category.getIcon());
-			if (file.exists()) {
-				file.delete();
-			}
+		try {
+			cateDao.delete(id);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		categoryDao.delete(id);
 	}
 
 	@Override
-	public Category get(int id) {
-		return categoryDao.get(id);
+	public int count() {
+		return cateDao.count();
 	}
 
 	@Override
-	public Category findById(int id) {
-		return categoryDao.get(id);
+	public List<Category> findAll(int page, int pagesize) {
+		return cateDao.findAll(page, pagesize);
 	}
 
 	@Override
-	public Category get(String name) {
-		return categoryDao.get(name);
-	}
-
-	@Override
-	public List<Category> getAll() {
-		return categoryDao.getAll();
-	}
-
-	@Override
-	public List<Category> search(String keyword) {
-		return categoryDao.search(keyword);
+	public Category findByCategoryname(String name) {
+		try {
+			return cateDao.findByCategoryname(name);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

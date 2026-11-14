@@ -97,7 +97,7 @@ body {
 
 		<c:choose>
 			<c:when test="${sessionScope.account != null}">
-				<a href="<c:url value='/admin/category/list'/>" class="btn btn-login btn-block">
+				<a href="<c:url value='/admin/categories'/>" class="btn btn-login btn-block">
 					<i class="fa fa-th-list"></i> Quản lý danh mục (CRUD)
 				</a>
 				<a href="<c:url value='/logout'/>" class="btn btn-register-alt btn-block">

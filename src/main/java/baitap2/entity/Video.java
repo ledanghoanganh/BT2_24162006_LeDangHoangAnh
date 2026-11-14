@@ -1,8 +1,14 @@
 package baitap2.entity;
 
 import java.io.Serializable;
-import java.util.List;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "videos")
@@ -11,47 +17,58 @@ public class Video implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "videoId")
+	@Column(name = "VideoId")
 	private String videoId;
 
-	@Column(name = "active")
-	private boolean active;
+	@Column(name = "Active")
+	private int active;
 
-	@Column(name = "description", columnDefinition = "NVARCHAR(MAX) NULL")
+	@Column(name = "Description", columnDefinition = "nvarchar(500) null")
 	private String description;
 
-	@Column(name = "poster", columnDefinition = "NVARCHAR(255) NULL")
+	@Column(name = "Poster", columnDefinition = "nvarchar(500) null")
 	private String poster;
 
-	@Column(name = "title", columnDefinition = "NVARCHAR(255) NULL")
+	@Column(name = "Title", columnDefinition = "nvarchar(500) null")
 	private String title;
 
-	@Column(name = "views")
+	@Column(name = "Views")
 	private int views;
 
 	// bi-directional many-to-one association to Category
-
 	@ManyToOne
-	@JoinColumn(name = "categoryId")
-	private Category categories;
+	@JoinColumn(name = "CategoryId")
+	private Category category;
 
+	// Constructors
 	public Video() {
-
 	}
 
+	public Video(String videoId, int active, String description, String poster, String title, int views,
+			Category category) {
+		this.videoId = videoId;
+		this.active = active;
+		this.description = description;
+		this.poster = poster;
+		this.title = title;
+		this.views = views;
+		this.category = category;
+	}
+
+	// Getters and Setters
 	public String getVideoId() {
-		return this.videoId;
+		return videoId;
 	}
 
 	public void setVideoId(String videoId) {
 		this.videoId = videoId;
 	}
 
-	public boolean getActive() {
-		return this.active;
+	public int getActive() {
+		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(int active) {
 		this.active = active;
 	}
 
@@ -80,7 +97,7 @@ public class Video implements Serializable {
 	}
 
 	public int getViews() {
-		return this.views;
+		return views;
 	}
 
 	public void setViews(int views) {
@@ -88,10 +105,24 @@ public class Video implements Serializable {
 	}
 
 	public Category getCategory() {
-		return this.categories;
+		return category;
 	}
 
 	public void setCategory(Category category) {
-		this.categories = category;
+		this.category = category;
+	}
+
+	public Category getCategories() {
+		return category;
+	}
+
+	public void setCategories(Category category) {
+		this.category = category;
+	}
+
+	@Override
+	public String toString() {
+		return "Video [videoId=" + videoId + ", active=" + active + ", description=" + description + ", poster="
+				+ poster + ", title=" + title + ", views=" + views + "]";
 	}
 }

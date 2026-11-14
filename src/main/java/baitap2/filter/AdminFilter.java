@@ -2,7 +2,7 @@ package baitap2.filter;
 
 import java.io.IOException;
 
-import baitap2.model.User;
+import baitap2.entity.User;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;

@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import baitap2.model.User;
-import baitap2.service.UserService;
+import baitap2.entity.User;
+import baitap2.service.IUserService;
 import baitap2.service.impl.UserServiceImpl;
 import baitap2.config.Constant;
 
@@ -32,7 +32,7 @@ public class LoginController extends HttpServlet {
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				if (Constant.COOKIE_REMEMBER.equals(cookie.getName())) {
-					UserService userService = new UserServiceImpl();
+					IUserService userService = new UserServiceImpl();
 					User user = userService.get(cookie.getValue());
 					if (user != null) {
 						session = req.getSession(true);
@@ -68,7 +68,7 @@ public class LoginController extends HttpServlet {
 			return;
 		}
 
-		UserService userService = new UserServiceImpl();
+		IUserService userService = new UserServiceImpl();
 		User user = userService.login(username, password);
 		if (user != null) {
 			HttpSession session = req.getSession(true);

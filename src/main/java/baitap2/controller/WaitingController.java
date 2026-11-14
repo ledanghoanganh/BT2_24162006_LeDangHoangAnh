@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import baitap2.model.User;
+import baitap2.entity.User;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/waiting")

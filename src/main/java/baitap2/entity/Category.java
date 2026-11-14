@@ -1,8 +1,18 @@
 package baitap2.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "categories")
@@ -12,33 +22,49 @@ public class Category implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "categoryId")
-	private int categoryId;
+	@Column(name = "CategoryId")
+	private int categoryid;
 
-	@Column(name = "categoryname", columnDefinition = "NVARCHAR(255) NULL")
+	@Column(name = "CategoryName", columnDefinition = "nvarchar(50) not null")
+	@NotEmpty(message = "Không được phép rỗng")
 	private String categoryname;
 
-	@Column(name = "images", columnDefinition = "NVARCHAR(255) NULL")
+	@Column(name = "Images", columnDefinition = "nvarchar(500) null")
 	private String images;
 
-	@Column(name = "status")
+	@Column(name = "Status")
 	private int status;
 
 	// bi-directional many-to-one association to Video
+	@OneToMany(mappedBy = "category")
+	private List<Video> videos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "categories")
-	private List<Video> videos;
-
+	// Constructors
 	public Category() {
-
 	}
 
-	public int getCategoryId() {
-		return this.categoryId;
+	public Category(int categoryid, String categoryname, String images, int status) {
+		this.categoryid = categoryid;
+		this.categoryname = categoryname;
+		this.images = images;
+		this.status = status;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public Category(int categoryid, String categoryname, String images, int status, List<Video> videos) {
+		this.categoryid = categoryid;
+		this.categoryname = categoryname;
+		this.images = images;
+		this.status = status;
+		this.videos = videos;
+	}
+
+	// Getters and Setters
+	public int getCategoryid() {
+		return categoryid;
+	}
+
+	public void setCategoryid(int categoryid) {
+		this.categoryid = categoryid;
 	}
 
 	public String getCategoryname() {
@@ -66,23 +92,58 @@ public class Category implements Serializable {
 	}
 
 	public List<Video> getVideos() {
-		return this.videos;
+		return videos;
 	}
 
 	public void setVideos(List<Video> videos) {
 		this.videos = videos;
 	}
 
+	// Helper / Backward compatibility methods
+	public int getCateId() {
+		return categoryid;
+	}
+
+	public void setCateId(int cateId) {
+		this.categoryid = cateId;
+	}
+
+	public String getCateName() {
+		return categoryname;
+	}
+
+	public void setCateName(String cateName) {
+		this.categoryname = cateName;
+	}
+
+	public String getIcon() {
+		return images;
+	}
+
+	public void setIcon(String icon) {
+		this.images = icon;
+	}
+
 	public Video addVideo(Video video) {
+		if (getVideos() == null) {
+			this.videos = new ArrayList<>();
+		}
 		getVideos().add(video);
 		video.setCategory(this);
 		return video;
 	}
 
 	public Video removeVideo(Video video) {
-		getVideos().remove(video);
+		if (getVideos() != null) {
+			getVideos().remove(video);
+		}
 		video.setCategory(null);
 		return video;
 	}
 
+	@Override
+	public String toString() {
+		return "Category [categoryid=" + categoryid + ", categoryname=" + categoryname + ", images=" + images
+				+ ", status=" + status + "]";
+	}
 }

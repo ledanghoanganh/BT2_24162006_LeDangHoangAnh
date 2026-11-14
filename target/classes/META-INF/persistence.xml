@@ -7,6 +7,7 @@
 	<persistence-unit name="jpa-hibernate-mysql">
 		<class>baitap2.entity.Category</class>
 		<class>baitap2.entity.Video</class>
+		<class>baitap2.entity.User</class>
 
 		<validation-mode>NONE</validation-mode>
 

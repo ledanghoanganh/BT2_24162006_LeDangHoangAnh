@@ -87,7 +87,7 @@ body {
 		</div>
 
 		<c:if test="${sessionScope.account != null && sessionScope.account.roleid == 1}">
-			<a href="<c:url value='/admin/category/list'/>" class="btn btn-login btn-block">
+			<a href="<c:url value='/admin/categories'/>" class="btn btn-login btn-block">
 				<i class="fa fa-th-list"></i> Quản lý danh mục (CRUD Category)
 			</a>
 		</c:if>

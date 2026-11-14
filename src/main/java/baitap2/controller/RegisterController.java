@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 import baitap2.config.Constant;
-import baitap2.service.UserService;
+import baitap2.service.IUserService;
 import baitap2.service.impl.UserServiceImpl;
 
 @SuppressWarnings("serial")
@@ -50,7 +50,7 @@ public class RegisterController extends HttpServlet {
 		String email = req.getParameter("email");
 		String fullname = req.getParameter("fullname");
 		String phone = req.getParameter("phone");
-		UserService service = new UserServiceImpl();
+		IUserService service = new UserServiceImpl();
 		String alertMsg = "";
 		if (service.checkExistEmail(email)) {
 			alertMsg = "Email đã tồn tại!";
