@@ -45,16 +45,18 @@ public class User implements Serializable {
 	@Column(name = "phone", length = 50)
 	private String phone;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "createddate")
 	private Date createddate;
+
+	@Column(name = "status")
+	private int status;
 
 	// Constructors
 	public User() {
 	}
 
 	public User(String email, String username, String fullname, String password, String avatar, int roleid,
-			String phone, Date createddate) {
+			String phone, Date createddate, int status) {
 		this.email = email;
 		this.username = username;
 		this.fullname = fullname;
@@ -63,10 +65,11 @@ public class User implements Serializable {
 		this.roleid = roleid;
 		this.phone = phone;
 		this.createddate = createddate;
+		this.status = status;
 	}
 
 	public User(int id, String email, String username, String fullname, String password, String avatar, int roleid,
-			String phone, Date createddate) {
+			String phone, Date createddate, int status) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
@@ -76,6 +79,7 @@ public class User implements Serializable {
 		this.roleid = roleid;
 		this.phone = phone;
 		this.createddate = createddate;
+		this.status = status;
 	}
 
 	// Getters and Setters
@@ -183,10 +187,17 @@ public class User implements Serializable {
 		this.createddate = createdDate;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", username=" + username + ", fullname=" + fullname
-				+ ", avatar=" + avatar + ", roleid=" + roleid + ", phone=" + phone + ", createddate=" + createddate
-				+ "]";
+		return "User [id=" + id + ", email=" + email + ", username=" + username + ", fullname=" + fullname + ", avatar="
+				+ avatar + ", roleid=" + roleid + ", phone=" + phone + ", createddate=" + createddate + "]";
 	}
 }

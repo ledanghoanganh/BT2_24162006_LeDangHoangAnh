@@ -26,4 +26,13 @@ public interface IUserService {
 	boolean checkExistUsername(String username);
 
 	boolean checkExistPhone(String phone);
+
+	User findByEmail(String email);
+
+	User findByUsernameOrEmail(String keyword);
+
+	boolean activateUser(String username);
+
+	boolean updatePassword(String username, String newPassword);
+
 }

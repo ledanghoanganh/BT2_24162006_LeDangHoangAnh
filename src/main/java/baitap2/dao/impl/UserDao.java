@@ -138,4 +138,33 @@ public class UserDao implements IUserDao {
 			enma.close();
 		}
 	}
+
+	@Override
+	public User findByEmail(String email) {
+		EntityManager enma = JPAConfig.getEntityManager();
+		try {
+			String jpql = "SELECT u FROM User u WHERE u.email = :email";
+			TypedQuery<User> query = enma.createQuery(jpql, User.class);
+			query.setParameter("email", email);
+			List<User> list = query.getResultList();
+			return (list != null && !list.isEmpty()) ? list.get(0) : null;
+		} finally {
+			enma.close();
+		}
+	}
+
+	@Override
+	public User findByUsernameOrEmail(String keyword) {
+		EntityManager enma = JPAConfig.getEntityManager();
+		try {
+			String jpql = "SELECT u FROM User u WHERE u.username = :keyword OR u.email = :keyword";
+			TypedQuery<User> query = enma.createQuery(jpql, User.class);
+			query.setParameter("keyword", keyword);
+			List<User> list = query.getResultList();
+			return (list != null && !list.isEmpty()) ? list.get(0) : null;
+		} finally {
+			enma.close();
+		}
+	}
+
 }

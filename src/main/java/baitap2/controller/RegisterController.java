@@ -2,7 +2,6 @@ package baitap2.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,67 +12,67 @@ import java.io.IOException;
 import baitap2.config.Constant;
 import baitap2.service.IUserService;
 import baitap2.service.impl.UserServiceImpl;
+import baitap2.util.EmailUtil;
+import baitap2.util.OtpUtil;
 
-@SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/register")
 public class RegisterController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession(false);
-		if (session != null && session.getAttribute("username") != null) {
-			resp.sendRedirect(req.getContextPath() + "/admin");
-			return;
-		}
-
-		// Check cookie
-		Cookie[] cookies = req.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("username")) {
-					session = req.getSession(true);
-					session.setAttribute("username", cookie.getValue());
-					resp.sendRedirect(req.getContextPath() + "/admin");
-					return;
-				}
-			}
-		}
 		req.getRequestDispatcher(Constant.PATH_REGISTER).forward(req, resp);
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
 		req.setCharacterEncoding("UTF-8");
+
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
 		String fullname = req.getParameter("fullname");
 		String phone = req.getParameter("phone");
+
 		IUserService service = new UserServiceImpl();
-		String alertMsg = "";
 		if (service.checkExistEmail(email)) {
-			alertMsg = "Email đã tồn tại!";
-			req.setAttribute("alert", alertMsg);
+			req.setAttribute("alert", "Email đã tồn tại!");
 			req.getRequestDispatcher(Constant.PATH_REGISTER).forward(req, resp);
 			return;
 		}
 		if (service.checkExistUsername(username)) {
-			alertMsg = "Tài khoản đã tồn tại!";
-			req.setAttribute("alert", alertMsg);
+			req.setAttribute("alert", "Tài khoản đã tồn tại!");
 			req.getRequestDispatcher(Constant.PATH_REGISTER).forward(req, resp);
 			return;
 		}
+
+		// Đăng ký tài khoản (mật khẩu được hash và status = 0)
 		boolean isSuccess = service.register(username, password, email, fullname, phone);
 		if (isSuccess) {
-			// SendMail sm = new SendMail();
-			// sm.sendMail(email, "Shopping.hoanganh.vn", "Welcome to Shopping. Please Login
-			// to use service. Thanks !");
-			req.setAttribute("alert", alertMsg);
-			resp.sendRedirect(req.getContextPath() + "/login");
+			// Sinh mã OTP
+			String otp = OtpUtil.generateOTP();
+			long expireTime = System.currentTimeMillis() + (5 * 60 * 1000); // Hiệu lực 5 phút
+
+			// Lưu OTP và username vào session
+			HttpSession session = req.getSession(true);
+			session.setAttribute("REGISTER_OTP", otp);
+			session.setAttribute("REGISTER_OTP_EXPIRE", expireTime);
+			session.setAttribute("REGISTER_USERNAME", username);
+			session.setAttribute("REGISTER_EMAIL", email);
+
+			// Gửi mail OTP
+			String subject = "Mã xác thực kích hoạt tài khoản - Web Bán Hàng";
+			String body = "<h3>Xin chào " + fullname + ",</h3>"
+					+ "<p>Mã OTP kích hoạt tài khoản của bạn là: <b style='font-size:20px;color:blue;'>" + otp
+					+ "</b></p>"
+					+ "<p>Mã có hiệu lực trong vòng 5 phút. Vui lòng không chia sẻ mã này cho bất kỳ ai.</p>";
+			EmailUtil.sendEmail(email, subject, body);
+
+			// Chuyển hướng sang trang xác thực OTP
+			resp.sendRedirect(req.getContextPath() + "/verify-otp");
 		} else {
-			alertMsg = "System error!";
-			req.setAttribute("alert", alertMsg);
+			req.setAttribute("alert", "Đăng ký thất bại! Vui lòng thử lại.");
 			req.getRequestDispatcher(Constant.PATH_REGISTER).forward(req, resp);
 		}
 	}
