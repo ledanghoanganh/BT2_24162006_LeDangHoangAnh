@@ -16,7 +16,7 @@ public class MainController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/views/index.jsp").forward(request, response);
+		response.sendRedirect(request.getContextPath() + "/home");
 	}
 
 	@Override
