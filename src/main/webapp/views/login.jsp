@@ -15,7 +15,8 @@
 <style>
 body {
 	background-color: #f7f7f7;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, sans-serif;
 }
 
 .login-container {
@@ -154,13 +155,14 @@ body {
 			</section>
 
 			<div class="login-options">
-				<label>
-					<input type="checkbox" name="remember" value="ok"> Nhớ tôi
-				</label>
-				<a href="#">Quên mật khẩu?</a>
+				<label> <input type="checkbox" name="remember" value="ok">
+					Nhớ tôi
+				</label> <a href="${pageContext.request.contextPath}/forgot-password">Quên
+					mật khẩu?</a>
 			</div>
 
-			<button type="submit" class="btn btn-login btn-block">Đăng nhập</button>
+			<button type="submit" class="btn btn-login btn-block">Đăng
+				nhập</button>
 		</form>
 	</div>
 

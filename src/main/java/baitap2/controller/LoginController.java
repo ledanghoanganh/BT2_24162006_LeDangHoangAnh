@@ -34,7 +34,7 @@ public class LoginController extends HttpServlet {
 				if (Constant.COOKIE_REMEMBER.equals(cookie.getName())) {
 					IUserService userService = new UserServiceImpl();
 					User user = userService.get(cookie.getValue());
-					if (user != null) {
+					if (user != null && user.getStatus() == 1) {
 						session = req.getSession(true);
 						session.setAttribute("account", user);
 						session.setAttribute("username", user.getUserName());
@@ -71,14 +71,21 @@ public class LoginController extends HttpServlet {
 		IUserService userService = new UserServiceImpl();
 		User user = userService.login(username, password);
 		if (user != null) {
+			if (user.getStatus() == 0) {
+				req.setAttribute("alert", "Tài khoản chưa được kích hoạt! Vui lòng xác thực mã OTP gửi qua email.");
+				req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
+				return;
+			}
+
 			HttpSession session = req.getSession(true);
 			session.setAttribute("account", user);
+			session.setAttribute("username", user.getUsername());
 			if (isRememberMe) {
 				saveRemeberMe(resp, username);
 			}
 			resp.sendRedirect(req.getContextPath() + "/waiting");
 		} else {
-			alertMsg = "Tài khoản hoặc mật khẩu không đúng";
+			alertMsg = "Tài khoản hoặc mật khẩu không đúng";
 			req.setAttribute("alert", alertMsg);
 			req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
 		}

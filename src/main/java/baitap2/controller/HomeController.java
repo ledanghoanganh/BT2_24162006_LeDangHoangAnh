@@ -1,6 +1,7 @@
 package baitap2.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,10 +10,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import baitap2.entity.Category;
+import baitap2.service.ICategoryService;
+import baitap2.service.impl.CategoryServiceImpl;
+
 @WebServlet(urlPatterns = { "/home", "/admin/home", "/manager/home" })
 public class HomeController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private ICategoryService categoryService = new CategoryServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,6 +32,17 @@ public class HomeController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return;
 		}
+
+		String search = request.getParameter("search");
+		List<Category> list;
+		if (search != null && !search.trim().isEmpty()) {
+			list = categoryService.searchByName(search.trim());
+		} else {
+			list = categoryService.findAll();
+		}
+
+		request.setAttribute("listcate", list);
+		request.setAttribute("searchKeyword", search);
 		request.getRequestDispatcher("/views/home.jsp").forward(request, response);
 	}
 
