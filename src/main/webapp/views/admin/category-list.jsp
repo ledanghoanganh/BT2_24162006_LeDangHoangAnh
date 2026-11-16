@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
-<c:if
-	test="${empty sessionScope.account || sessionScope.account.roleid != 1}">
+<c:if test="${empty sessionScope.account || (sessionScope.account.roleid != 1 && sessionScope.account.roleid != 2)}">
 	<c:redirect url="/login" />
 </c:if>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Quản lý danh mục</title>
+<title>Quản lý danh mục - Dashboard Admin</title>
 <!-- Bootstrap 3.4.1 -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -17,130 +16,436 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-body {
-	background-color: #f5f5f5;
-	font-family: Arial, sans-serif;
+body, html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #f7f7f7;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-.top-navbar {
-	background-color: #0099e6;
-	color: white;
-	padding: 12px 20px;
+/* Header */
+.admin-header {
+	background-color: #008be5;
+	color: #ffffff;
+	padding: 12px 25px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	height: 60px;
 }
 
-.top-navbar a {
-	color: white;
+.admin-header .header-brand {
+	font-size: 26px;
+	font-weight: 700;
+	color: #ffffff;
 	text-decoration: none;
 }
 
-.top-navbar .btn-logout {
-	background-color: #e65100;
-	padding: 5px 12px;
-	border-radius: 3px;
-	color: white;
+.admin-header .user-info {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	font-size: 15px;
 }
 
-.main-container {
-	padding: 25px;
-}
-
-.content-box {
-	background: #ffffff;
-	padding: 20px 25px;
+.btn-admin-logout {
+	background-color: #ff3b30;
+	color: #ffffff;
+	padding: 6px 14px;
 	border-radius: 4px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 14px;
 }
 
-.table th, .table td {
-	vertical-align: middle !important;
+.btn-admin-logout:hover {
+	background-color: #e02d24;
+	color: #ffffff;
 }
 
-.cate-img {
-	border-radius: 4px;
+/* Layout Wrapper */
+.admin-wrapper {
+	display: flex;
+	min-height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+.admin-sidebar {
+	width: 240px;
+	background-color: #008be5;
+	color: #ffffff;
+	flex-shrink: 0;
+	padding-top: 15px;
+}
+
+.sidebar-profile {
+	text-align: center;
+	padding-bottom: 20px;
+}
+
+.sidebar-avatar {
+	width: 105px;
+	height: 105px;
+	border-radius: 50%;
+	border: 3px solid #70c7ff;
 	object-fit: cover;
-	border: 1px solid #ddd;
+	background-color: #ffffff;
+	display: inline-block;
+}
+
+.sidebar-role-text {
+	color: #ffffff;
+	font-size: 14px;
+	margin-top: 10px;
+	font-weight: 500;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-menu > li > a {
+	display: flex;
+	align-items: center;
+	padding: 12px 20px;
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.sidebar-menu > li.menu-dashboard {
+	background-color: #ff0000;
+}
+
+.sidebar-menu > li.menu-category {
+	background-color: #1a1a1a;
+}
+
+.sidebar-menu > li.menu-other {
+	background-color: #008be5;
+}
+
+.sidebar-menu i.menu-icon {
+	width: 26px;
+	font-size: 18px;
+	margin-right: 10px;
+}
+
+/* Submenu */
+.sidebar-submenu {
+	list-style: none;
+	padding: 5px 0 10px 42px;
+	margin: 0;
+	background-color: #008be5;
+	position: relative;
+}
+
+.sidebar-submenu::before {
+	content: "";
+	position: absolute;
+	left: 30px;
+	top: 5px;
+	bottom: 15px;
+	width: 2px;
+	background-color: #ff6b6b;
+}
+
+.sidebar-submenu li {
+	position: relative;
+	margin: 8px 0;
+}
+
+.sidebar-submenu li::before {
+	content: "";
+	position: absolute;
+	left: -12px;
+	top: 10px;
+	width: 10px;
+	height: 2px;
+	background-color: #ff6b6b;
+}
+
+.sidebar-submenu li a {
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.sidebar-submenu li a:hover {
+	text-decoration: underline;
+}
+
+/* Main Content */
+.admin-content {
+	flex-grow: 1;
+	background-color: #ffffff;
+	padding: 25px 35px;
+	box-shadow: inset 2px 0 6px rgba(0,0,0,0.03);
+}
+
+.page-title {
+	color: #ff0000;
+	font-size: 28px;
+	font-weight: 700;
+	margin-top: 5px;
+	margin-bottom: 4px;
+}
+
+.page-subtitle {
+	color: #666666;
+	font-size: 14px;
+	margin-bottom: 25px;
+}
+
+/* Panel */
+.admin-panel {
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.admin-panel-header {
+	background-color: #f7f7f7;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 12px 18px;
+	font-weight: 500;
+	color: #444444;
+	font-size: 14px;
+}
+
+.admin-panel-body {
+	padding: 15px 18px;
+}
+
+.table-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	font-size: 13px;
+	color: #555555;
+}
+
+.table-toolbar select {
+	height: 32px;
+	padding: 4px 8px;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	margin-right: 5px;
+}
+
+.table-toolbar input[type="text"] {
+	height: 32px;
+	padding: 4px 10px;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	width: 200px;
+}
+
+/* Category Table */
+.category-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.category-table th {
+	border-top: 1px solid #eeeeee;
+	border-bottom: 1px solid #dddddd;
+	padding: 12px 15px;
+	font-weight: 600;
+	color: #333333;
+	font-size: 14px;
+}
+
+.category-table td {
+	border-bottom: 1px solid #eeeeee;
+	padding: 16px 15px;
+	vertical-align: middle;
+	font-size: 14px;
+	color: #444444;
+}
+
+/* Image circle in table */
+.cate-img-circle {
+	width: 95px;
+	height: 95px;
+	border-radius: 50%;
+	background-color: #f2f3f5;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.cate-img-circle img {
+	max-width: 80%;
+	max-height: 80%;
+	object-fit: contain;
+}
+
+.action-links a {
+	color: #337ab7;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.action-links a:hover {
+	text-decoration: underline;
 }
 </style>
 </head>
 <body>
-	<div class="top-navbar">
-		<div>
-			<a href="<c:url value='/home'/>" style="font-size: 18px; font-weight: bold;">
-				<i class="fa fa-shopping-bag"></i> Trang chủ
-			</a>
-			<span style="margin: 0 10px;">|</span>
-			<span>Xin chào: <strong>${sessionScope.account.fullName}</strong></span>
-		</div>
-		<div>
-			<a href="<c:url value='/logout'/>" class="btn-logout">
-				<i class="fa fa-sign-out"></i> Đăng xuất
-			</a>
-		</div>
-	</div>
 
-	<div class="container-fluid main-container">
-		<div class="content-box">
-			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-				<h3 style="margin: 0;"><i class="fa fa-list"></i> Danh sách danh mục</h3>
-				<a href="<c:url value="/admin/category/add"/>" class="btn btn-primary">
-					<i class="fa fa-plus"></i> Add Category
-				</a>
+	<!-- Top Header -->
+	<header class="admin-header">
+		<a href="<c:url value='/admin/categories'/>" class="header-brand">Dashboard</a>
+		<div class="user-info">
+			<span>Xin chào: <strong>
+				<c:choose>
+					<c:when test="${not empty sessionScope.account.fullname}">${sessionScope.account.fullname}</c:when>
+					<c:otherwise>${sessionScope.account.username}</c:otherwise>
+				</c:choose>
+			</strong></span>
+			<a href="<c:url value='/logout'/>" class="btn-admin-logout">Đăng xuất</a>
+		</div>
+	</header>
+
+	<div class="admin-wrapper">
+		<!-- Left Sidebar -->
+		<aside class="admin-sidebar">
+			<ul class="sidebar-menu">
+				<li class="menu-dashboard">
+					<a href="<c:url value='/admin/dashboard'/>">
+						<i class="fa fa-tachometer menu-icon"></i>
+						<span>Dashboard</span>
+					</a>
+				</li>
+				<li class="menu-category">
+					<a href="<c:url value='/admin/categories'/>">
+						<i class="fa fa-folder-open-o menu-icon"></i>
+						<span>Quản lý Danh mục</span>
+					</a>
+				</li>
+				<ul class="sidebar-submenu">
+					<li><a href="<c:url value='/admin/category/add'/>">Thêm danh mục mới</a></li>
+					<li><a href="<c:url value='/admin/categories'/>">Danh sách danh mục</a></li>
+				</ul>
+				<li class="menu-other">
+					<a href="<c:url value='/admin/products'/>">
+						<i class="fa fa-desktop menu-icon"></i>
+						<span>Quản lý sản phẩm</span>
+					</a>
+				</li>
+				<c:if test="${sessionScope.account.roleid == 1}">
+					<li class="menu-other">
+						<a href="<c:url value='/admin/users'/>">
+							<i class="fa fa-th-large menu-icon"></i>
+							<span>Quản lý tài khoản</span>
+						</a>
+					</li>
+				</c:if>
+			</ul>
+		</aside>
+
+		<!-- Main Content -->
+		<main class="admin-content">
+			<h1 class="page-title">Quản lý danh mục</h1>
+			<p class="page-subtitle">Nơi bạn có thể quản lý danh mục của mình</p>
+
+			<div class="admin-panel">
+				<div class="admin-panel-header">
+					Danh sách danh mục
+				</div>
+				<div class="admin-panel-body">
+					<!-- Toolbar -->
+					<div class="table-toolbar">
+						<div>
+							<select>
+								<option>10</option>
+								<option>25</option>
+								<option>50</option>
+							</select>
+							<span>records per page</span>
+						</div>
+						<div>
+							<span>Search: </span>
+							<input type="text" id="categorySearch" placeholder="Nhập để tìm kiếm...">
+						</div>
+					</div>
+
+					<!-- Table -->
+					<table class="category-table" id="categoryTable">
+						<thead>
+							<tr>
+								<th style="width: 80px;">STT</th>
+								<th style="width: 250px;">Hình ảnh</th>
+								<th>Tên danh mục</th>
+								<th style="width: 160px;">Hành động</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+								<c:when test="${not empty listcate}">
+									<c:forEach items="${listcate}" var="cate" varStatus="STT">
+										<tr>
+											<td>${STT.index + 1}</td>
+											<td>
+												<div class="cate-img-circle">
+													<c:choose>
+														<c:when test="${not empty cate.images && cate.images.startsWith('http')}">
+															<c:url value="${cate.images}" var="imgUrl" />
+														</c:when>
+														<c:when test="${not empty cate.images}">
+															<c:url value="/image?fname=${cate.images}" var="imgUrl" />
+														</c:when>
+														<c:otherwise>
+															<c:set var="imgUrl" value="https://via.placeholder.com/100?text=No+Image" />
+														</c:otherwise>
+													</c:choose>
+													<img src="${imgUrl}" alt="${cate.categoryname}"
+														onerror="this.src='https://via.placeholder.com/100?text=No+Image'" />
+												</div>
+											</td>
+											<td style="font-weight: 500;">${cate.categoryname}</td>
+											<td class="action-links">
+												<a href="<c:url value='/admin/category/edit?id=${cate.categoryid}'/>">Sửa</a>
+												<span style="color: #999999; margin: 0 4px;">|</span>
+												<a href="<c:url value='/admin/category/delete?id=${cate.categoryid}'/>"
+													onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">Xóa</a>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<tr>
+										<td colspan="4" style="text-align: center; padding: 30px; color: #888;">
+											Không tìm thấy danh mục nào.
+										</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
+				</div>
 			</div>
-
-			<table class="table table-bordered table-striped table-hover">
-				<thead>
-					<tr class="info">
-						<th style="width: 60px; text-align: center;">STT</th>
-						<th style="width: 220px; text-align: center;">Images</th>
-						<th>Category name</th>
-						<th style="width: 140px; text-align: center;">Status</th>
-						<th style="width: 160px; text-align: center;">Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${listcate}" var="cate" varStatus="STT">
-						<tr>
-							<td style="text-align: center; font-weight: bold;">${STT.index + 1}</td>
-							<td style="text-align: center;">
-								<c:choose>
-									<c:when test="${not empty cate.images && cate.images.startsWith('http')}">
-										<c:url value="${cate.images}" var="imgUrl" />
-									</c:when>
-									<c:otherwise>
-										<c:url value="/image?fname=${cate.images}" var="imgUrl" />
-									</c:otherwise>
-								</c:choose>
-								<img height="100" width="140" src="${imgUrl}" class="cate-img"
-									onerror="this.src='https://via.placeholder.com/140x100?text=No+Image'" />
-							</td>
-							<td style="font-weight: 500;">${cate.categoryname}</td>
-							<td style="text-align: center;">
-								<c:if test="${cate.status == 1}">
-									<span class="label label-success" style="font-size: 12px;">Hoạt động</span>
-								</c:if>
-								<c:if test="${cate.status != 1}">
-									<span class="label label-danger" style="font-size: 12px;">Khóa</span>
-								</c:if>
-							</td>
-							<td style="text-align: center;">
-								<a href="<c:url value='/admin/category/edit?id=${cate.categoryid}'/>"
-									class="btn btn-sm btn-warning">
-									<i class="fa fa-pencil"></i> Sửa
-								</a>
-								<a href="<c:url value='/admin/category/delete?id=${cate.categoryid}'/>"
-									class="btn btn-sm btn-danger"
-									onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">
-									<i class="fa fa-trash"></i> Xóa
-								</a>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
+		</main>
 	</div>
+
+	<!-- JavaScript tìm kiếm nhanh theo bảng -->
+	<script>
+		document.getElementById('categorySearch').addEventListener('keyup', function() {
+			let filter = this.value.toLowerCase();
+			let rows = document.querySelectorAll('#categoryTable tbody tr');
+			rows.forEach(row => {
+				let text = row.innerText.toLowerCase();
+				row.style.display = text.includes(filter) ? '' : 'none';
+			});
+		});
+	</script>
 </body>
 </html>

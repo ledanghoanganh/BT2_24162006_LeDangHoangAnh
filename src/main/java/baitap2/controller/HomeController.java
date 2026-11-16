@@ -43,6 +43,13 @@ public class HomeController extends HttpServlet {
 
 		request.setAttribute("listcate", list);
 		request.setAttribute("searchKeyword", search);
+
+		String uri = request.getRequestURI();
+		if (uri.contains("/manager/home") || uri.contains("/admin/home")) {
+			request.getRequestDispatcher("/views/admin/category-list.jsp").forward(request, response);
+			return;
+		}
+
 		request.getRequestDispatcher("/views/home.jsp").forward(request, response);
 	}
 

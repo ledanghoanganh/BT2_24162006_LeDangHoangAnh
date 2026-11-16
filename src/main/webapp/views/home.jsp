@@ -67,6 +67,25 @@ body {
 	border-radius: 4px;
 	object-fit: cover;
 	border: 1px solid #ddd;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cate-img:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.category-title-link {
+	color: #0077b5;
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: color 0.2s;
+}
+
+.category-title-link:hover {
+	color: #005580;
+	text-decoration: underline;
 }
 
 .search-box {
@@ -94,7 +113,10 @@ body {
 				<span class="label label-danger" style="margin-left: 8px;">Admin</span>
 			</c:if>
 			<c:if test="${sessionScope.account.roleid == 2}">
-				<span class="label label-info" style="margin-left: 8px;">Member</span>
+				<span class="label label-warning" style="margin-left: 8px;">Manager</span>
+			</c:if>
+			<c:if test="${sessionScope.account.roleid == 5}">
+				<span class="label label-info" style="margin-left: 8px;">User</span>
 			</c:if>
 		</div>
 		<div>
@@ -117,7 +139,7 @@ body {
 					<i class="fa fa-list"></i> Danh sách danh mục
 				</h3>
 
-				<!-- Thanh tìm kiếm danh mục cho người dùng -->
+				<!-- Thanh tìm kiếm danh mục -->
 				<form action="<c:url value='/home'/>" method="get" class="form-inline search-box" style="margin: 0;">
 					<div class="input-group">
 						<input type="text" name="search" value="${searchKeyword}" class="form-control" placeholder="Tìm kiếm danh mục...">
@@ -127,7 +149,7 @@ body {
 							</button>
 						</span>
 					</div>
-					<!-- Nút thêm danh mục: Chỉ hiển thị cho Admin (roleid == 1) -->
+					<!-- Nút thêm danh mục: Chỉ hiển thị cho Admin -->
 					<c:if test="${sessionScope.account.roleid == 1}">
 						<a href="<c:url value='/admin/category/add'/>" class="btn btn-success" style="margin-left: 8px;">
 							<i class="fa fa-plus"></i> Add Category
@@ -136,7 +158,7 @@ body {
 				</form>
 			</div>
 
-			<!-- Bảng danh mục sản phẩm (Đã loại bỏ nút Sửa / Xóa đối với người dùng thường) -->
+			<!-- Bảng danh mục sản phẩm (Bấm vào hình ảnh hoặc tên để chuyển đến trang xem sản phẩm) -->
 			<table class="table table-bordered table-striped table-hover">
 				<thead>
 					<tr class="info">
@@ -144,7 +166,6 @@ body {
 						<th style="width: 220px; text-align: center;">Images</th>
 						<th>Category name</th>
 						<th style="width: 140px; text-align: center;">Status</th>
-						<!-- Cột Action chỉ hiển thị nếu là Admin -->
 						<c:if test="${sessionScope.account.roleid == 1}">
 							<th style="width: 160px; text-align: center;">Action</th>
 						</c:if>
@@ -168,10 +189,17 @@ body {
 												<c:set var="imgUrl" value="https://via.placeholder.com/140x100?text=No+Image" />
 											</c:otherwise>
 										</c:choose>
-										<img height="100" width="140" src="${imgUrl}" class="cate-img"
-											onerror="this.src='https://via.placeholder.com/140x100?text=No+Image'" />
+										<!-- Nhấp vào hình ảnh để xem sản phẩm -->
+										<a href="<c:url value='/products?id=${cate.categoryid}&name=${cate.categoryname}'/>" title="Xem sản phẩm thuộc danh mục ${cate.categoryname}">
+											<img height="100" width="140" src="${imgUrl}" class="cate-img"
+												onerror="this.src='https://via.placeholder.com/140x100?text=No+Image'" />
+										</a>
 									</td>
-									<td style="font-weight: 500; font-size: 15px;">${cate.categoryname}</td>
+									<td>
+										<a href="<c:url value='/products?id=${cate.categoryid}&name=${cate.categoryname}'/>" class="category-title-link">
+											${cate.categoryname}
+										</a>
+									</td>
 									<td style="text-align: center;">
 										<c:if test="${cate.status == 1}">
 											<span class="label label-success" style="font-size: 12px; padding: 5px 10px;">Hoạt động</span>
@@ -180,7 +208,6 @@ body {
 											<span class="label label-danger" style="font-size: 12px; padding: 5px 10px;">Khóa</span>
 										</c:if>
 									</td>
-									<!-- Các nút CRUD: Chỉ hiển thị cho Admin -->
 									<c:if test="${sessionScope.account.roleid == 1}">
 										<td style="text-align: center;">
 											<a href="<c:url value='/admin/category/edit?id=${cate.categoryid}'/>"

@@ -37,8 +37,8 @@ public class UserServiceImpl implements IUserService {
 		Date date = new Date();
 		// Mật khẩu được băm bằng BCrypt trước khi lưu vào DB
 		String hashedPassword = PasswordUtil.hashPassword(password);
-		// status = 0 (Chưa kích hoạt, cần xác thực OTP)
-		User newUser = new User(email, username, fullname, hashedPassword, null, 2, phone, date, 0);
+		// roleid = 5 (User thường), status = 0 (Chưa kích hoạt, cần xác thực OTP)
+		User newUser = new User(email, username, fullname, hashedPassword, null, 5, phone, date, 0);
 		userDao.insert(newUser);
 		return true;
 	}

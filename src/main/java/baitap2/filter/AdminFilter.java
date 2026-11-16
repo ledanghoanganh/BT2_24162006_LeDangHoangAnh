@@ -42,10 +42,15 @@ public class AdminFilter implements Filter {
 			return;
 		}
 
-		// 2. Đã đăng nhập nhưng không phải admin (roleid != 1) -> không có quyền vào
-		// /admin/*
-		if (user.getRoleid() != 1) {
+		// 2. Kiểm tra quyền: Chỉ role 1 (Admin) và role 2 (Manager) được vào /admin/*
+		if (user.getRoleid() != 1 && user.getRoleid() != 2) {
 			resp.sendRedirect(req.getContextPath() + "/home");
+			return;
+		}
+
+		// 3. Manager (roleid == 2) không được truy cập chức năng Quản lý tài khoản
+		if (user.getRoleid() == 2 && req.getRequestURI().contains("/admin/users")) {
+			resp.sendRedirect(req.getContextPath() + "/admin/categories");
 			return;
 		}
 
