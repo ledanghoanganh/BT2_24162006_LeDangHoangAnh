@@ -27,10 +27,15 @@ public class HomeController extends HttpServlet {
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", 0);
 
+		String uri = request.getRequestURI();
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("account") == null) {
-			response.sendRedirect(request.getContextPath() + "/login");
-			return;
+
+		// Trang quản trị (/admin/home, /manager/home) yêu cầu đăng nhập
+		if (uri.contains("/manager/home") || uri.contains("/admin/home")) {
+			if (session == null || session.getAttribute("account") == null) {
+				response.sendRedirect(request.getContextPath() + "/login");
+				return;
+			}
 		}
 
 		String search = request.getParameter("search");
@@ -44,7 +49,6 @@ public class HomeController extends HttpServlet {
 		request.setAttribute("listcate", list);
 		request.setAttribute("searchKeyword", search);
 
-		String uri = request.getRequestURI();
 		if (uri.contains("/manager/home") || uri.contains("/admin/home")) {
 			request.getRequestDispatcher("/views/admin/category-list.jsp").forward(request, response);
 			return;

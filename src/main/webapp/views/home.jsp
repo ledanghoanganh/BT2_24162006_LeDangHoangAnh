@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
-<c:if test="${empty sessionScope.account}">
-	<c:redirect url="/login" />
-</c:if>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,17 +32,21 @@ body {
 	text-decoration: none;
 }
 
-.top-navbar .btn-logout {
+.top-navbar .btn-logout,
+.top-navbar .btn-login {
 	background-color: #e65100;
 	padding: 5px 12px;
 	border-radius: 3px;
 	color: white;
 	font-weight: 500;
+	display: inline-block;
 }
 
-.top-navbar .btn-logout:hover {
+.top-navbar .btn-logout:hover,
+.top-navbar .btn-login:hover {
 	background-color: #bf360c;
 	color: white;
+	text-decoration: none;
 }
 
 .main-container {
@@ -103,31 +104,47 @@ body {
 				<i class="fa fa-shopping-bag"></i> Trang chủ
 			</a>
 			<span style="margin: 0 10px;">|</span>
-			<span>Xin chào: <strong>
-				<c:choose>
-					<c:when test="${not empty sessionScope.account.fullname}">${sessionScope.account.fullname}</c:when>
-					<c:otherwise>${sessionScope.account.username}</c:otherwise>
-				</c:choose>
-			</strong></span>
-			<c:if test="${sessionScope.account.roleid == 1}">
-				<span class="label label-danger" style="margin-left: 8px;">Admin</span>
-			</c:if>
-			<c:if test="${sessionScope.account.roleid == 2}">
-				<span class="label label-warning" style="margin-left: 8px;">Manager</span>
-			</c:if>
-			<c:if test="${sessionScope.account.roleid == 5}">
-				<span class="label label-info" style="margin-left: 8px;">User</span>
-			</c:if>
+			<c:choose>
+				<c:when test="${not empty sessionScope.account}">
+					<span>Xin chào: <strong>
+						<c:choose>
+							<c:when test="${not empty sessionScope.account.fullname}">${sessionScope.account.fullname}</c:when>
+							<c:otherwise>${sessionScope.account.username}</c:otherwise>
+						</c:choose>
+					</strong></span>
+					<c:if test="${sessionScope.account.roleid == 1}">
+						<span class="label label-danger" style="margin-left: 8px;">Admin</span>
+					</c:if>
+					<c:if test="${sessionScope.account.roleid == 2}">
+						<span class="label label-warning" style="margin-left: 8px;">Manager</span>
+					</c:if>
+					<c:if test="${sessionScope.account.roleid == 5}">
+						<span class="label label-info" style="margin-left: 8px;">User</span>
+					</c:if>
+				</c:when>
+				<c:otherwise>
+					<span>Xin chào <strong>Guest</strong></span>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<div>
-			<c:if test="${sessionScope.account.roleid == 1}">
-				<a href="<c:url value='/admin/categories'/>" class="btn btn-sm btn-info" style="margin-right: 10px; color: white;">
-					<i class="fa fa-cogs"></i> Trang Quản Trị
-				</a>
-			</c:if>
-			<a href="<c:url value='/logout'/>" class="btn-logout">
-				<i class="fa fa-sign-out"></i> Đăng xuất
-			</a>
+			<c:choose>
+				<c:when test="${not empty sessionScope.account}">
+					<c:if test="${sessionScope.account.roleid == 1}">
+						<a href="<c:url value='/admin/categories'/>" class="btn btn-sm btn-info" style="margin-right: 10px; color: white;">
+							<i class="fa fa-cogs"></i> Trang Quản Trị
+						</a>
+					</c:if>
+					<a href="<c:url value='/logout'/>" class="btn-logout">
+						<i class="fa fa-sign-out"></i> Đăng xuất
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a href="<c:url value='/login'/>" class="btn-login">
+						<i class="fa fa-sign-in"></i> Đăng nhập
+					</a>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 
