@@ -11,14 +11,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import baitap2.entity.Category;
+import baitap2.entity.Video;
 import baitap2.service.ICategoryService;
 import baitap2.service.impl.CategoryServiceImpl;
+import baitap2.service.IVideoService;
+import baitap2.service.impl.VideoServiceImpl;
 
 @WebServlet(urlPatterns = { "/home", "/admin/home", "/manager/home" })
 public class HomeController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private ICategoryService categoryService = new CategoryServiceImpl();
+	private IVideoService videoService = new VideoServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -48,6 +52,9 @@ public class HomeController extends HttpServlet {
 
 		request.setAttribute("listcate", list);
 		request.setAttribute("searchKeyword", search);
+
+		List<Video> latestVideos = videoService.findTop10Latest();
+		request.setAttribute("latestVideos", latestVideos);
 
 		if (uri.contains("/manager/home") || uri.contains("/admin/home")) {
 			request.getRequestDispatcher("/views/admin/category-list.jsp").forward(request, response);
