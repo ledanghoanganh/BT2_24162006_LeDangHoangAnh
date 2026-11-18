@@ -266,6 +266,12 @@ body, html {
 						<span>Quản lý sản phẩm</span>
 					</a>
 				</li>
+				<li class="menu-other">
+					<a href="<c:url value='/admin/videos'/>">
+						<i class="fa fa-video-camera menu-icon"></i>
+						<span>Quản lý Video</span>
+					</a>
+				</li>
 				<c:if test="${sessionScope.account.roleid == 1}">
 					<li class="menu-other">
 						<a href="<c:url value='/admin/users'/>">

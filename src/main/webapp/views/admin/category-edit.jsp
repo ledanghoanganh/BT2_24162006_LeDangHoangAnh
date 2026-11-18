@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
@@ -273,6 +274,12 @@ body, html {
 					<a href="<c:url value='/admin/products'/>">
 						<i class="fa fa-desktop menu-icon"></i>
 						<span>Quản lý sản phẩm</span>
+					</a>
+				</li>
+				<li class="menu-other">
+					<a href="<c:url value='/admin/videos'/>">
+						<i class="fa fa-video-camera menu-icon"></i>
+						<span>Quản lý Video</span>
 					</a>
 				</li>
 				<c:if test="${sessionScope.account.roleid == 1}">
