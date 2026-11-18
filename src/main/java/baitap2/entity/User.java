@@ -1,7 +1,9 @@
 package baitap2.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -50,6 +53,9 @@ public class User implements Serializable {
 
 	@Column(name = "status")
 	private int status;
+
+	@OneToMany(mappedBy = "user")
+	private List<Video> videos = new ArrayList<>();
 
 	// Constructors
 	public User() {
@@ -193,6 +199,14 @@ public class User implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public List<Video> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
 	}
 
 	@Override
