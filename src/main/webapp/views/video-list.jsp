@@ -117,7 +117,7 @@ body {
 			<div>
 				<h3 style="margin: 0; color: #0077b5;">
 					<i class="fa fa-youtube-play"></i> Danh sách Video của User: <span
-						style="color: #d9534f;">${owner.fullname}</span>
+						style="color: #d9534f;">${not empty owner ? owner.fullname : 'Người dùng'}</span>
 				</h3>
 				<p style="margin: 5px 0 0 0; color: #777;">
 					Tổng cộng <strong>${totalVideos}</strong> videos (Phân trang 6 video/trang)

@@ -1,16 +1,25 @@
-# Compiled class file
-*.class
+# ==========================================
+# Maven Build Artifacts (TUYỆT ĐỐI KHÔNG PUSH)
+# ==========================================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
 
-# Log file
+# ==========================================
+# Compiled Class & Log Files
+# ==========================================
+*.class
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# ==========================================
+# Package Files (Tránh đẩy file nén nặng)
+# ==========================================
 *.jar
 *.war
 *.nar
@@ -19,17 +28,61 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# ==========================================
+# Virtual Machine Crash Logs
+# ==========================================
 hs_err_pid*
 replay_pid*
 
+# ==========================================
+# Hệ điều hành (Windows / macOS)
+# ==========================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# ==========================================
+# IDEs & Trình soạn thảo
+# ==========================================
+# Visual Studio Code
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+
+# Eclipse Runtime Metadata & Temporary files
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.recommenders
+
+# ==========================================
+# Tài liệu nội bộ & Biến môi trường bảo mật
+# ==========================================
 .commandcode/
 docs/huongdan.md
-target/
 
-# Environment secrets
 .env
 .env.*
 src/main/resources/.env
 !.env.example
-

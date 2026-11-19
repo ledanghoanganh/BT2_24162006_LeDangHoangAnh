@@ -12,17 +12,7 @@
 		<validation-mode>NONE</validation-mode>
 
 		<properties>
-			<!-- Cấu hình kết nối SQL Server (nếu dùng SQL Server) -->
-<!--			<property name="jakarta.persistence.jdbc.url"
-				value="jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=webst2" />
-			<property name="jakarta.persistence.jdbc.driver"
-				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-			<property name="jakarta.persistence.jdbc.user" value="sa" />
-			<property name="jakarta.persistence.jdbc.password" value="1234567@a$" />
-			<property name="hibernate.dialect"
-				value="org.hibernate.dialect.SQLServerDialect" />-->
-
-			<!-- Cấu hình kết nối MySQL (bỏ comment và comment cấu hình SQL Server ở trên nếu dùng MySQL) -->
+			<!-- Cấu hình kết nối MySQL -->
 			<property name="jakarta.persistence.jdbc.driver"
 				value="com.mysql.cj.jdbc.Driver" />
 			<property name="jakarta.persistence.jdbc.url"
