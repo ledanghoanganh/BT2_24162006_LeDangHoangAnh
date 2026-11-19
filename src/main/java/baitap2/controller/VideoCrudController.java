@@ -26,10 +26,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
-@MultipartConfig(
-	fileSizeThreshold = 1024 * 1024 * 2,           // 2MB: Bộ nhớ tạm (vượt quá 2MB sẽ ghi ra đĩa tạm tránh tràn RAM)
-	maxFileSize = 1024L * 1024L * 500L,            // 500MB: Dung lượng tối đa cho 1 file video (hỗ trợ thoải mái file 210MB+)
-	maxRequestSize = 1024L * 1024L * 600L          // 600MB: Tổng dung lượng tối đa cho toàn bộ Request multipart
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB: Bộ nhớ tạm (vượt quá 2MB sẽ ghi ra đĩa tạm tránh tràn RAM)
+		maxFileSize = 1024L * 1024L * 500L, // 500MB: Dung lượng tối đa cho 1 file video (hỗ trợ thoải mái file 210MB+)
+		maxRequestSize = 1024L * 1024L * 600L // 600MB: Tổng dung lượng tối đa cho toàn bộ Request multipart
 )
 @WebServlet(urlPatterns = { "/admin/videos", "/admin/video/list", "/admin/video/add", "/admin/video/insert",
 		"/admin/video/edit", "/admin/video/update", "/admin/video/delete" })
@@ -123,9 +122,9 @@ public class VideoCrudController extends HttpServlet {
 			if (currentUser != null) {
 				video.setUser(currentUser);
 			} else {
-				// Mặc định lấy user id = 1 nếu chưa đăng nhập khi test
+				// Mặc định lấy user id = 5 nếu chưa đăng nhập khi test
 				User defaultUser = new User();
-				defaultUser.setId(1);
+				defaultUser.setId(5);
 				video.setUser(defaultUser);
 			}
 

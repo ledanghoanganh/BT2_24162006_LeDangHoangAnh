@@ -139,6 +139,10 @@ public class UserVideoController extends HttpServlet {
 			}
 		} else if (loggedInUser != null) {
 			targetUserId = loggedInUser.getId();
+		} else {
+			// Chuyển hướng sang trang đăng nhập để định danh tài khoản
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
 		}
 
 		User owner = userService.findById(targetUserId);
