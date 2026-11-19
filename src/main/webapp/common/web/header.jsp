@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/taglib.jsp" %>
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #0d6efd;">
-    <div class="container">
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="${ctx}/home">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm py-2" style="background-color: #0d6efd;">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2 me-4" href="${ctx}/home">
             <i class="fa fa-play-circle fs-3 text-warning"></i>
             <span>VideoHub</span>
         </a>
@@ -30,7 +30,7 @@
                 </c:if>
             </ul>
 
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 ms-auto">
                 <c:choose>
                     <c:when test="${not empty sessionScope.account}">
                         <div class="dropdown">
