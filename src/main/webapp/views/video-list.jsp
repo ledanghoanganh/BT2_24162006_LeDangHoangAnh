@@ -1,209 +1,167 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Kênh Video - Danh sách Video của User</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Kênh Video - VideoHub</title>
 <style>
-body {
-	background-color: #f5f5f5;
-	font-family: Arial, sans-serif;
-}
-
-.content-box {
-	background: #fff;
-	padding: 25px;
-	border-radius: 6px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-	margin-top: 20px;
-}
-
 .video-card {
-	background: #fff;
-	border-radius: 6px;
-	border: 1px solid #e0e0e0;
 	transition: transform 0.2s, box-shadow 0.2s;
-	height: 350px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	border-radius: 8px;
+	overflow: hidden;
 }
-
 .video-card:hover {
 	transform: translateY(-4px);
-	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12) !important;
 }
-
 .video-thumb {
 	height: 180px;
 	width: 100%;
 	object-fit: cover;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
 }
-
 .video-title-link {
-	color: #1a0dab;
-	font-weight: bold;
+	color: #212529;
+	font-weight: 600;
 	font-size: 15px;
 	text-decoration: none;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	height: 42px;
+	height: 40px;
+	line-height: 1.3;
 }
-
 .video-title-link:hover {
-	color: #d9534f;
-	text-decoration: underline;
+	color: #0d6efd;
 }
 </style>
 </head>
 <body>
+<div class="container py-4">
 
-	<div class="container content-box">
-		<div
-			style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">
+	<!-- Header Kênh Video -->
+	<div class="card shadow-sm border-0 mb-4">
+		<div class="card-body p-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
 			<div>
-				<h3 style="margin: 0; color: #0077b5;">
-					<i class="fa fa-youtube-play"></i> Danh sách Video của User: <span
-						style="color: #d9534f;">${not empty owner ? owner.fullname : 'Người dùng'}</span>
+				<h3 class="fw-bold mb-1 d-flex align-items-center gap-2 text-dark">
+					<i class="fa fa-play-circle text-danger"></i> Kênh Video: <span class="text-primary">${not empty owner ? owner.fullname : 'Người dùng'}</span>
 				</h3>
-				<p style="margin: 5px 0 0 0; color: #777;">
-					Tổng cộng <strong>${totalVideos}</strong> videos (Phân trang 6 video/trang)
+				<p class="text-muted mb-0 small">
+					Tổng số: <strong>${totalVideos}</strong> videos (Phân trang 6 video/trang)
 				</p>
 			</div>
-			<div>
-				<!-- NÚT UPLOAD VIDEO CHO MỌI USER ĐÃ ĐĂNG NHẬP -->
+			<div class="d-flex align-items-center gap-2">
 				<c:choose>
 					<c:when test="${not empty sessionScope.account}">
 						<a href="<c:url value='/video/upload'/>" class="btn btn-success">
-							<i class="fa fa-cloud-upload"></i> Upload Video Mới
+							<i class="fa fa-upload me-1"></i> Upload Video Mới
 						</a>
 					</c:when>
 					<c:otherwise>
 						<a href="<c:url value='/login'/>" class="btn btn-warning">
-							<i class="fa fa-sign-in"></i> Đăng nhập để Upload Video
+							<i class="fa fa-sign-in-alt me-1"></i> Đăng nhập để Upload Video
 						</a>
 					</c:otherwise>
 				</c:choose>
-				<a href="<c:url value='/home'/>" class="btn btn-default"
-					style="margin-left: 5px;"> <i class="fa fa-arrow-left"></i> Về
-					Trang chủ
+				<a href="<c:url value='/home'/>" class="btn btn-outline-secondary">
+					<i class="fa fa-arrow-left me-1"></i> Về Trang chủ
 				</a>
 			</div>
 		</div>
+	</div>
 
-		<!-- NẾU CHƯA CÓ VIDEO NÀO -->
-		<c:if test="${empty videoList}">
-			<div class="text-center" style="padding: 60px 20px; background-color: #fafafa; border-radius: 6px; border: 1px dashed #ddd; margin: 20px 0;">
-				<i class="fa fa-video-camera fa-4x" style="color: #bbb; margin-bottom: 15px;"></i>
-				<h3 style="color: #555; margin-bottom: 10px;">Bạn chưa có video nào</h3>
-				<p style="color: #888; font-size: 15px; margin-bottom: 20px;">
-					Hãy chia sẻ video đầu tiên của bạn đến với mọi người ngay hôm nay!
-				</p>
+	<!-- NẾU CHƯA CÓ VIDEO NÀO -->
+	<c:if test="${empty videoList}">
+		<div class="card shadow-sm border-0 text-center py-5">
+			<div class="card-body">
+				<i class="fa fa-video fa-4x text-muted mb-3 d-block"></i>
+				<h4 class="fw-bold text-secondary">Bạn chưa có video nào</h4>
+				<p class="text-muted mb-4">Hãy tải lên video đầu tiên của bạn để chia sẻ đến mọi người!</p>
 				<c:if test="${not empty sessionScope.account}">
-					<a href="<c:url value='/video/upload'/>" class="btn btn-success btn-lg">
-						<i class="fa fa-cloud-upload"></i> Tải lên Video ngay bây giờ
+					<a href="<c:url value='/video/upload'/>" class="btn btn-success px-4 py-2">
+						<i class="fa fa-upload me-1"></i> Tải lên Video ngay bây giờ
 					</a>
 				</c:if>
 			</div>
-		</c:if>
+		</div>
+	</c:if>
 
-		<!-- LƯỚI 6 VIDEO MỖI TRANG -->
-		<c:if test="${not empty videoList}">
-			<div class="row">
-				<c:forEach items="${videoList}" var="vid">
-					<div class="col-md-4 col-sm-6" style="margin-bottom: 25px;">
-						<div class="video-card">
-							<a href="<c:url value='/video/detail?id=${vid.videoId}'/>"> <c:choose>
-									<c:when test="${vid.poster.startsWith('http')}">
-										<img src="${vid.poster}" class="video-thumb" alt="${vid.title}">
-									</c:when>
-									<c:otherwise>
-										<img src="<c:url value='/image?fname=${vid.poster}'/>"
-											class="video-thumb" alt="${vid.title}">
-									</c:otherwise>
-								</c:choose>
+	<!-- LƯỚI 6 VIDEO MỖI TRANG -->
+	<c:if test="${not empty videoList}">
+		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+			<c:forEach items="${videoList}" var="vid">
+				<div class="col">
+					<div class="card h-100 shadow-sm border-0 video-card">
+						<a href="<c:url value='/video/detail?id=${vid.videoId}'/>">
+							<c:choose>
+								<c:when test="${vid.poster.startsWith('http')}">
+									<img src="${vid.poster}" class="video-thumb" alt="${vid.title}">
+								</c:when>
+								<c:otherwise>
+									<img src="<c:url value='/image?fname=${vid.poster}'/>" class="video-thumb" alt="${vid.title}">
+								</c:otherwise>
+							</c:choose>
+						</a>
+						<div class="card-body d-flex flex-column p-3">
+							<a href="<c:url value='/video/detail?id=${vid.videoId}'/>" class="video-title-link mb-2" title="${vid.title}">
+								${vid.title}
 							</a>
-							<div
-								style="padding: 12px; display: flex; flex-direction: column; justify-content: space-between; height: 170px;">
-								<div>
-									<!-- BẤM VÀO TIÊU ĐỀ ĐỂ PLAY VIDEO THEO ĐÚNG YÊU CẦU GIẢNG VIÊN -->
-									<a href="<c:url value='/video/detail?id=${vid.videoId}'/>"
-										class="video-title-link" title="${vid.title}"> ${vid.title}
+							<p class="small text-muted mb-3" style="height: 38px; overflow: hidden; line-height: 1.4;">
+								${vid.description}
+							</p>
+							<div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+								<span class="small text-muted"><i class="fa fa-eye me-1"></i> ${vid.views} lượt xem</span>
+								<div class="d-flex align-items-center gap-1">
+									<a href="<c:url value='/video/detail?id=${vid.videoId}'/>" class="btn btn-sm btn-danger px-3">
+										<i class="fa fa-play me-1"></i> Xem
 									</a>
-									<p
-										style="font-size: 13px; color: #666; margin-top: 8px; height: 38px; overflow: hidden;">
-										${vid.description}</p>
-								</div>
-								<div
-									style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f0f0f0; padding-top: 8px;">
-									<span style="font-size: 12px; color: #888;"> <i
-										class="fa fa-eye"></i> ${vid.views} lượt xem
-									</span>
-									<div>
-										<a href="<c:url value='/video/detail?id=${vid.videoId}'/>"
-											class="btn btn-sm btn-danger"> <i class="fa fa-play"></i>
-											Xem video
+									<c:if test="${not empty sessionScope.account && ((not empty vid.user && sessionScope.account.id == vid.user.id) || sessionScope.account.roleid == 1)}">
+										<a href="<c:url value='/video/edit?id=${vid.videoId}'/>" class="btn btn-sm btn-outline-warning" title="Chỉnh sửa video">
+											<i class="fa fa-edit"></i>
 										</a>
-										<!-- NÚT SỬA & XÓA CHO CHỦ SỞ HỮU VIDEO HOẶC ADMIN -->
-										<c:if test="${not empty sessionScope.account && ((not empty vid.user && sessionScope.account.id == vid.user.id) || sessionScope.account.roleid == 1)}">
-											<a href="<c:url value='/video/edit?id=${vid.videoId}'/>" class="btn btn-sm btn-default" style="color: #f0ad4e; margin-left: 4px;" title="Chỉnh sửa video">
-												<i class="fa fa-pencil"></i>
-											</a>
-											<a href="<c:url value='/video/delete?id=${vid.videoId}'/>" class="btn btn-sm btn-default" style="color: #d9534f; margin-left: 4px;" onclick="return confirm('Bạn chắc chắn muốn xóa video này?');" title="Xóa video của bạn">
-												<i class="fa fa-trash"></i>
-											</a>
-										</c:if>
-									</div>
+										<a href="<c:url value='/video/delete?id=${vid.videoId}'/>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn chắc chắn muốn xóa video này?');" title="Xóa video">
+											<i class="fa fa-trash"></i>
+										</a>
+									</c:if>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
+			</c:forEach>
+		</div>
+	</c:if>
+
+	<!-- THANH PHÂN TRANG BOOTSTRAP 5 -->
+	<c:if test="${totalPages > 1}">
+		<nav aria-label="Phân trang video" class="mt-4">
+			<ul class="pagination justify-content-center">
+				<c:if test="${currentPage > 1}">
+					<li class="page-item">
+						<a class="page-link" href="<c:url value='/video?userId=${targetUserId}&page=${currentPage - 1}'/>">
+							&laquo; Trang trước
+						</a>
+					</li>
+				</c:if>
+
+				<c:forEach begin="1" end="${totalPages}" var="i">
+					<li class="page-item ${currentPage == i ? 'active' : ''}">
+						<a class="page-link" href="<c:url value='/video?userId=${targetUserId}&page=${i}'/>">${i}</a>
+					</li>
 				</c:forEach>
-			</div>
-		</c:if>
 
-		<!-- THANH PHÂN TRANG BOOTSTRAP PAGINATION -->
-		<c:if test="${totalPages > 1}">
-			<div class="text-center" style="margin-top: 20px;">
-				<ul class="pagination pagination-lg">
-					<!-- Nút Previous -->
-					<c:if test="${currentPage > 1}">
-						<li><a
-							href="<c:url value='/video?userId=${targetUserId}&page=${currentPage - 1}'/>"
-							aria-label="Previous"> <span aria-hidden="true">&laquo;
-									Trang trước</span>
-						</a></li>
-					</c:if>
+				<c:if test="${currentPage < totalPages}">
+					<li class="page-item">
+						<a class="page-link" href="<c:url value='/video?userId=${targetUserId}&page=${currentPage + 1}'/>">
+							Trang sau &raquo;
+						</a>
+					</li>
+				</c:if>
+			</ul>
+		</nav>
+	</c:if>
 
-					<!-- Các số trang -->
-					<c:forEach begin="1" end="${totalPages}" var="i">
-						<li class="${currentPage == i ? 'active' : ''}"><a
-							href="<c:url value='/video?userId=${targetUserId}&page=${i}'/>">${i}</a>
-						</li>
-					</c:forEach>
-
-					<!-- Nút Next -->
-					<c:if test="${currentPage < totalPages}">
-						<li><a
-							href="<c:url value='/video?userId=${targetUserId}&page=${currentPage + 1}'/>"
-							aria-label="Next"> <span aria-hidden="true">Trang
-									sau &raquo;</span>
-						</a></li>
-					</c:if>
-				</ul>
-			</div>
-		</c:if>
-
-	</div>
+</div>
 </body>
 </html>

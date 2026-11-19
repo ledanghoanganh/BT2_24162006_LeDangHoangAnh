@@ -4,92 +4,69 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Tải Lên Video Mới - Kênh Cá Nhân</title>
-<!-- Bootstrap 3.4.1 -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<!-- Font Awesome 4.7.0 -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body {
-	background-color: #f5f5f5;
-	font-family: Arial, sans-serif;
-}
-
-.upload-box {
-	background: #ffffff;
-	padding: 30px 35px;
-	border-radius: 6px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	margin-top: 30px;
-	max-width: 750px;
-}
-</style>
+<title>Tải Lên Video Mới - VideoHub</title>
 </head>
 <body>
-
-	<!-- Form Upload cho User -->
-	<div class="container upload-box">
-		<div style="border-bottom: 2px solid #0099e6; padding-bottom: 12px; margin-bottom: 25px;">
-			<h2 style="margin: 0; color: #0099e6; font-size: 24px; font-weight: bold;">
+<div class="container py-4" style="max-width: 800px;">
+	<div class="card shadow-sm border-0">
+		<div class="card-header bg-white py-3 border-bottom">
+			<h4 class="fw-bold mb-1 text-primary d-flex align-items-center gap-2">
 				<i class="fa fa-cloud-upload"></i> Tải Lên Video Mới
-			</h2>
-			<p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">
-				Chia sẻ video của bạn lên kênh cá nhân và trang chủ hệ thống
-			</p>
+			</h4>
+			<p class="text-muted small mb-0">Chia sẻ video của bạn lên kênh cá nhân và trang chủ hệ thống</p>
 		</div>
 
-		<c:if test="${not empty error}">
-			<div class="alert alert-danger">${error}</div>
-		</c:if>
-		<form action="<c:url value='/video/upload'/>" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label>Tiêu đề Video: <span class="text-danger">*</span></label>
-				<input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề video của bạn" required autofocus>
-			</div>
+		<div class="card-body p-4">
+			<c:if test="${not empty error}">
+				<div class="alert alert-danger py-2 mb-3"><i class="fa fa-exclamation-triangle me-1"></i> ${error}</div>
+			</c:if>
 
-			<div class="form-group">
-				<label>Mô tả Video:</label>
-				<textarea name="description" rows="3" class="form-control" placeholder="Mô tả nội dung video"></textarea>
-			</div>
+			<form action="<c:url value='/video/upload'/>" method="post" enctype="multipart/form-data">
+				<div class="mb-3">
+					<label class="form-label fw-semibold">Tiêu đề Video: <span class="text-danger">*</span></label>
+					<input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề video của bạn" required autofocus>
+				</div>
 
-			<!-- UPLOAD ẢNH BÌA POSTER -->
-			<div class="form-group">
-				<label><i class="fa fa-picture-o"></i> Ảnh bìa Poster (Thumbnail):</label>
-				<input type="file" name="posterFile" class="form-control" accept="image/*">
-				<small class="text-muted">Hoặc dán URL ảnh trực tiếp nếu không tải file từ máy:</small>
-				<input type="text" name="posterUrl" class="form-control" placeholder="https://example.com/poster.jpg" style="margin-top: 4px;">
-			</div>
+				<div class="mb-3">
+					<label class="form-label fw-semibold">Mô tả Video:</label>
+					<textarea name="description" rows="3" class="form-control" placeholder="Mô tả nội dung video"></textarea>
+				</div>
 
-			<!-- UPLOAD FILE VIDEO MP4 -->
-			<div class="form-group" style="background-color: #f9f9f9; padding: 15px; border-radius: 4px; border: 1px dashed #0099e6;">
-				<label style="color: #0077b5;"><i class="fa fa-file-video-o"></i> File Video .mp4 (Dung lượng hỗ trợ tối đa 500MB):</label>
-				<input type="file" name="videoFile" class="form-control" accept="video/mp4,video/*">
-				<small class="text-muted">Nếu chưa có file video thực tế, bạn có thể nhập tên video mẫu (mặc định: <code>sample.mp4</code>):</small>
-				<input type="text" name="videoPathUrl" class="form-control" placeholder="sample.mp4" style="margin-top: 4px;">
-			</div>
+				<div class="mb-3">
+					<label class="form-label fw-semibold"><i class="fa fa-image me-1"></i> Ảnh bìa Poster (Thumbnail):</label>
+					<input type="file" name="posterFile" class="form-control" accept="image/*">
+					<small class="text-muted">Hoặc dán URL ảnh trực tiếp nếu không tải file từ máy:</small>
+					<input type="text" name="posterUrl" class="form-control mt-1" placeholder="https://example.com/poster.jpg">
+				</div>
 
-			<div class="form-group">
-				<label>Chủ đề / Danh mục:</label>
-				<select name="categoryId" class="form-control">
-					<option value="">-- Chọn danh mục (Tùy chọn) --</option>
-					<c:forEach items="${categories}" var="c">
-						<option value="${c.categoryid}">${c.categoryname}</option>
-					</c:forEach>
-				</select>
-			</div>
+				<div class="mb-3">
+					<label class="form-label fw-semibold"><i class="fa fa-video me-1"></i> File Video (.mp4): <span class="text-danger">*</span></label>
+					<input type="file" name="videoFile" class="form-control" accept="video/mp4,video/*">
+					<small class="text-muted">Hoặc dán URL video mp4 trực tiếp:</small>
+					<input type="text" name="videoPathUrl" class="form-control mt-1" placeholder="https://example.com/sample.mp4">
+				</div>
 
-			<div style="margin-top: 30px; display: flex; gap: 10px;">
-				<button type="submit" class="btn btn-primary btn-lg" style="background-color: #0099e6; border: none; padding: 10px 25px;">
-					<i class="fa fa-upload"></i> Đăng Video Ngay
-				</button>
-				<a href="<c:url value='/video'/>" class="btn btn-default btn-lg" style="padding: 10px 20px;">
-					Hủy bỏ
-				</a>
-			</div>
-		</form>
+				<div class="mb-3">
+					<label class="form-label fw-semibold">Chuyên mục:</label>
+					<select name="categoryId" class="form-select">
+						<option value="">-- Chọn danh mục (Không bắt buộc) --</option>
+						<c:forEach items="${categories}" var="c">
+							<option value="${c.categoryid}">${c.categoryname}</option>
+						</c:forEach>
+					</select>
+				</div>
+
+				<div class="mt-4 pt-3 border-top d-flex gap-2">
+					<button type="submit" class="btn btn-success px-4">
+						<i class="fa fa-upload me-1"></i> Tải lên ngay
+					</button>
+					<a href="<c:url value='/video'/>" class="btn btn-outline-secondary">
+						Hủy bỏ
+					</a>
+				</div>
+			</form>
+		</div>
 	</div>
-
+</div>
 </body>
 </html>

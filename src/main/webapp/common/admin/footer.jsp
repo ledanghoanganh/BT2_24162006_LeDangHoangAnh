@@ -2,9 +2,13 @@
 <%@ include file="/common/taglib.jsp" %>
 <footer class="bg-white border-top py-3 px-4 text-muted small mt-auto d-flex justify-content-between align-items-center">
     <div>
-        <strong>Copyright &copy; 2026 <a href="https://hcmute.edu.vn" target="_blank" class="text-decoration-none">HCM-UTE</a>.</strong> All rights reserved.
+        Phát triển bởi: <a href="https://github.com/ledanghoanganh" target="_blank" class="text-dark text-decoration-none fw-semibold">
+            <i class="fa-brands fa-github me-1"></i> Lê Đặng Hoàng Anh
+        </a>
     </div>
     <div>
-        <b>Phiên bản:</b> 2.4.0 (Sitemesh 3 &amp; Bootstrap 5)
+        <a href="https://github.com/ledanghoanganh/BT2_24162006_LeDangHoangAnh" target="_blank" class="text-muted text-decoration-none">
+            <i class="fa-brands fa-github me-1"></i> GitHub Repository
+        </a>
     </div>
 </footer>

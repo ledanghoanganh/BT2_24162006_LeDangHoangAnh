@@ -4,6 +4,7 @@
 target/
 build/
 deploy.ps1
+sync.ps1
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
