@@ -18,35 +18,6 @@ body {
 	font-family: Arial, sans-serif;
 }
 
-.top-navbar {
-	background-color: #0099e6;
-	color: white;
-	padding: 12px 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.top-navbar a {
-	color: white;
-	text-decoration: none;
-}
-
-.top-navbar .btn-logout, .top-navbar .btn-login {
-	background-color: #e65100;
-	padding: 5px 12px;
-	border-radius: 3px;
-	color: white;
-	font-weight: 500;
-	display: inline-block;
-}
-
-.top-navbar .btn-logout:hover, .top-navbar .btn-login:hover {
-	background-color: #bf360c;
-	color: white;
-	text-decoration: none;
-}
-
 .main-container {
 	padding: 25px;
 }
@@ -95,60 +66,8 @@ body {
 </style>
 </head>
 <body>
-	<!-- Thanh điều hướng Top Navbar -->
-	<div class="top-navbar">
-		<div>
-			<a href="<c:url value='/home'/>"
-				style="font-size: 18px; font-weight: bold;"> <i
-				class="fa fa-shopping-bag"></i> Trang chủ
-			</a> <span style="margin: 0 10px;">|</span>
-			<c:choose>
-				<c:when test="${not empty sessionScope.account}">
-					<span>Xin chào: <strong> <c:choose>
-								<c:when test="${not empty sessionScope.account.fullname}">${sessionScope.account.fullname}</c:when>
-								<c:otherwise>${sessionScope.account.username}</c:otherwise>
-							</c:choose>
-					</strong></span>
-					<c:if test="${sessionScope.account.roleid == 1}">
-						<span class="label label-danger" style="margin-left: 8px;">Admin</span>
-					</c:if>
-					<c:if test="${sessionScope.account.roleid == 2}">
-						<span class="label label-warning" style="margin-left: 8px;">Manager</span>
-					</c:if>
-					<c:if test="${sessionScope.account.roleid == 5}">
-						<span class="label label-info" style="margin-left: 8px;">User</span>
-					</c:if>
-				</c:when>
-				<c:otherwise>
-					<span>Xin chào <strong>Guest</strong></span>
-				</c:otherwise>
-			</c:choose>
-		</div>
-		<div>
-			<c:choose>
-				<c:when test="${not empty sessionScope.account}">
-					<c:if test="${sessionScope.account.roleid == 1}">
-						<a href="<c:url value='/admin/categories'/>"
-							class="btn btn-sm btn-info"
-							style="margin-right: 10px; color: white;"> <i
-							class="fa fa-cogs"></i> Trang Quản Trị
-						</a>
-					</c:if>
-					<a href="<c:url value='/logout'/>" class="btn-logout"> <i
-						class="fa fa-sign-out"></i> Đăng xuất
-					</a>
-				</c:when>
-				<c:otherwise>
-					<a href="<c:url value='/login'/>" class="btn-login"> <i
-						class="fa fa-sign-in"></i> Đăng nhập
-					</a>
-				</c:otherwise>
-			</c:choose>
-		</div>
-	</div>
-
 	<!-- Khung nội dung chính -->
-	<div class="container-fluid main-container">
+	<div class="container main-container">
 		<div class="content-box">
 			<div
 				style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -274,7 +193,7 @@ body {
 					<div class="thumbnail"
 						style="border-radius: 6px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); height: 320px; display: flex; flex-direction: column; justify-content: space-between;">
 						<a href="<c:url value='/video/detail?id=${vid.videoId}'/>"> <c:choose>
-								<c:when test="${vid.poster.startsWith('http')}">
+								<c:when test="${not empty vid.poster && vid.poster.startsWith('http')}">
 									<img src="${vid.poster}" alt="${vid.title}"
 										style="height: 160px; width: 100%; object-fit: cover; border-top-left-radius: 6px; border-top-right-radius: 6px;">
 								</c:when>

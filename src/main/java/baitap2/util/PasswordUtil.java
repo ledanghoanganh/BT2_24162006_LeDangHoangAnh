@@ -2,6 +2,9 @@ package baitap2.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class PasswordUtil {
 
     public static String hashPassword(String plainPassword) {

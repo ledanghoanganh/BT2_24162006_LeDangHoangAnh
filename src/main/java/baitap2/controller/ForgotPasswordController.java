@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import baitap2.entity.User;
 import baitap2.service.IUserService;
 import baitap2.service.impl.UserServiceImpl;
+import baitap2.util.BeanValidator;
 import baitap2.util.EmailUtil;
 import baitap2.util.OtpUtil;
 
@@ -34,6 +35,18 @@ public class ForgotPasswordController extends HttpServlet {
 			req.setAttribute("error", "Vui lòng nhập Email hoặc Tài khoản!");
 			req.getRequestDispatcher("/views/forgot-password.jsp").forward(req, resp);
 			return;
+		}
+
+		// Nếu người dùng nhập định dạng email, validate định dạng email thông qua Entity User
+		if (keyword.contains("@")) {
+			User userCheck = new User();
+			userCheck.setEmail(keyword.trim());
+			String emailErr = BeanValidator.getPropertyError(userCheck, "email");
+			if (emailErr != null) {
+				req.setAttribute("error", emailErr);
+				req.getRequestDispatcher("/views/forgot-password.jsp").forward(req, resp);
+				return;
+			}
 		}
 
 		IUserService userService = new UserServiceImpl();

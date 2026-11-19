@@ -163,12 +163,12 @@ body {
 
 			<button type="submit" class="btn btn-login btn-block">Đăng
 				nhập</button>
-		</form>
-	</div>
 
-	<div class="register-link">
-		Nếu bạn chưa có tài khoản trên hệ thống, thì hãy <a
-			href="<c:url value='/register'/>">Đăng ký</a>
+			<div class="register-link" style="margin-top: 15px; text-align: center;">
+				Nếu bạn chưa có tài khoản trên hệ thống, thì hãy <a
+					href="<c:url value='/register'/>">Đăng ký</a>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

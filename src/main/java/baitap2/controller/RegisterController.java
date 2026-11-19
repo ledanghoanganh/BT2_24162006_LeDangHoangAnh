@@ -10,8 +10,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 import baitap2.config.Constant;
+import baitap2.entity.User;
 import baitap2.service.IUserService;
 import baitap2.service.impl.UserServiceImpl;
+import baitap2.util.BeanValidator;
 import baitap2.util.EmailUtil;
 import baitap2.util.OtpUtil;
 
@@ -31,9 +33,31 @@ public class RegisterController extends HttpServlet {
 
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
+		String repassword = req.getParameter("repassword");
 		String email = req.getParameter("email");
 		String fullname = req.getParameter("fullname");
 		String phone = req.getParameter("phone");
+
+		// Backend Entity Validation
+		User userCheck = new User();
+		userCheck.setUsername(username != null ? username.trim() : "");
+		userCheck.setPassword(password != null ? password.trim() : "");
+		userCheck.setEmail(email != null ? email.trim() : "");
+		userCheck.setFullname(fullname != null ? fullname.trim() : "");
+		userCheck.setPhone(phone != null ? phone.trim() : "");
+
+		String valError = BeanValidator.getFirstError(userCheck);
+		if (valError != null) {
+			req.setAttribute("alert", valError);
+			req.getRequestDispatcher(Constant.PATH_REGISTER).forward(req, resp);
+			return;
+		}
+
+		if (repassword == null || !repassword.equals(password)) {
+			req.setAttribute("alert", "Mật khẩu xác nhận không khớp!");
+			req.getRequestDispatcher(Constant.PATH_REGISTER).forward(req, resp);
+			return;
+		}
 
 		IUserService service = new UserServiceImpl();
 		if (service.checkExistEmail(email)) {

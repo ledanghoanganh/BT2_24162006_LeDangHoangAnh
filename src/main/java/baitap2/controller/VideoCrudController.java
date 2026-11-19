@@ -17,6 +17,7 @@ import baitap2.service.ICategoryService;
 import baitap2.service.IVideoService;
 import baitap2.service.impl.CategoryServiceImpl;
 import baitap2.service.impl.VideoServiceImpl;
+import baitap2.util.BeanValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -112,12 +113,30 @@ public class VideoCrudController extends HttpServlet {
 			String posterUrl = req.getParameter("posterUrl");
 
 			Video video = new Video();
-			video.setVideoId(videoId);
-			video.setTitle(title);
+			video.setVideoId(videoId != null ? videoId.trim() : "");
+			video.setTitle(title != null ? title.trim() : "");
 			video.setDescription(description);
 			video.setActive(active);
 			video.setViews(0);
 			video.setCreatedDate(new Date());
+
+			// Backend Entity Validation
+			String idErr = BeanValidator.getPropertyError(video, "videoId");
+			if (idErr != null) {
+				req.setAttribute("error", idErr);
+				req.setAttribute("video", video);
+				req.setAttribute("categories", categoryService.findAll());
+				req.getRequestDispatcher("/views/admin/video-add.jsp").forward(req, resp);
+				return;
+			}
+			String titleErr = BeanValidator.getPropertyError(video, "title");
+			if (titleErr != null) {
+				req.setAttribute("error", titleErr);
+				req.setAttribute("video", video);
+				req.setAttribute("categories", categoryService.findAll());
+				req.getRequestDispatcher("/views/admin/video-add.jsp").forward(req, resp);
+				return;
+			}
 
 			if (currentUser != null) {
 				video.setUser(currentUser);
@@ -183,9 +202,19 @@ public class VideoCrudController extends HttpServlet {
 
 			Video video = videoService.findById(videoId);
 			if (video != null) {
-				video.setTitle(title);
+				video.setTitle(title != null ? title.trim() : "");
 				video.setDescription(description);
 				video.setActive(active);
+
+				// Backend Entity Validation
+				String titleErr = BeanValidator.getPropertyError(video, "title");
+				if (titleErr != null) {
+					req.setAttribute("error", titleErr);
+					req.setAttribute("video", video);
+					req.setAttribute("categories", categoryService.findAll());
+					req.getRequestDispatcher("/views/admin/video-edit.jsp").forward(req, resp);
+					return;
+				}
 
 				if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
 					Category cat = categoryService.findById(Integer.parseInt(categoryIdStr));

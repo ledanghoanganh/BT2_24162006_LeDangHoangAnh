@@ -12,6 +12,7 @@ import baitap2.config.Constant;
 import baitap2.entity.Category;
 import baitap2.service.ICategoryService;
 import baitap2.service.impl.CategoryServiceImpl;
+import baitap2.util.BeanValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -77,8 +78,17 @@ public class CategoryController extends HttpServlet {
 			String images = req.getParameter("images");
 
 			Category category = new Category();
-			category.setCategoryname(categoryname);
+			category.setCategoryname(categoryname != null ? categoryname.trim() : "");
 			category.setStatus(status);
+
+			// Backend Entity Validation
+			String catErr = BeanValidator.getPropertyError(category, "categoryname");
+			if (catErr != null) {
+				req.setAttribute("error", catErr);
+				req.setAttribute("category", category);
+				req.getRequestDispatcher("/views/admin/category-add.jsp").forward(req, resp);
+				return;
+			}
 
 			String fname = "";
 			String uploadPath = Constant.UPLOAD_DIRECTORY;
@@ -121,8 +131,17 @@ public class CategoryController extends HttpServlet {
 			}
 
 			String fileold = (category.getImages() != null) ? category.getImages() : "avatar.png";
-			category.setCategoryname(categoryname);
+			category.setCategoryname(categoryname != null ? categoryname.trim() : "");
 			category.setStatus(status);
+
+			// Backend Entity Validation
+			String catErr = BeanValidator.getPropertyError(category, "categoryname");
+			if (catErr != null) {
+				req.setAttribute("error", catErr);
+				req.setAttribute("category", category);
+				req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
+				return;
+			}
 
 			String fname = "";
 			String uploadPath = Constant.UPLOAD_DIRECTORY;

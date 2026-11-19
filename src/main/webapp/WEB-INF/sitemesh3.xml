@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	<!-- Use include dispatch mode to prevent premature response commit on Tomcat 11 -->
+	<dispatch-mode>include</dispatch-mode>
+
+	<!-- Exclude path from decoration -->
+	<mapping path="/api*" exclude="true" />
+	<mapping path="/image*" exclude="true" />
+	<mapping path="/video/stream*" exclude="true" />
+	<mapping path="/templates*" exclude="true" />
+	<mapping path="/assets*" exclude="true" />
+
+	<!-- Auth / Login decorator -->
+	<mapping path="/login" name="login" decorator="login.jsp" />
+	<mapping path="/register" name="login" decorator="login.jsp" />
+	<mapping path="/forgot-password" name="login" decorator="login.jsp" />
+	<mapping path="/reset-password" name="login" decorator="login.jsp" />
+	<mapping path="/verify-otp" name="login" decorator="login.jsp" />
+
+	<!-- Admin layout decorator -->
+	<mapping path="/admin/*" name="admin" decorator="admin.jsp" />
+
+	<!-- User / Web layout decorator -->
+	<mapping path="/*" name="web" decorator="web.jsp" />
+</sitemesh>

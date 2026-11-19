@@ -10,19 +10,35 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "videos")
-@NamedQuery(name = "Video.findAll", query = "SELECT v FROM Video v")
+@NamedQuery(name = "Video.findAll", query = "SELECT v FROM Video v LEFT JOIN FETCH v.user")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = {"user", "category"})
 public class Video implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@NotEmpty(message = "Mã Video không được để trống")
+	@Size(min = 2, max = 50, message = "Mã Video từ 2 đến 50 ký tự")
 	@Column(name = "VideoId", length = 50)
 	private String videoId;
 
+	@NotEmpty(message = "Tiêu đề Video không được để trống")
+	@Size(min = 2, max = 500, message = "Tiêu đề Video từ 2 đến 500 ký tự")
 	@Column(name = "Title", length = 500, nullable = false)
 	private String title;
 
@@ -42,6 +58,7 @@ public class Video implements Serializable {
 	private int active;
 
 	@Column(name = "CreatedDate")
+	@Builder.Default
 	private Date createdDate = new Date();
 
 	// Mối quan hệ n - 1 với User (Nhiều video thuộc 1 User)
@@ -54,25 +71,6 @@ public class Video implements Serializable {
 	@JoinColumn(name = "CategoryId", nullable = true)
 	private Category category;
 
-	// Constructors
-	public Video() {
-	}
-
-	public Video(String videoId, String title, String description, String poster, String videoPath, int views,
-			int active, Date createdDate, User user, Category category) {
-		this.videoId = videoId;
-		this.title = title;
-		this.description = description;
-		this.poster = poster;
-		this.videoPath = videoPath;
-		this.views = views;
-		this.active = active;
-		this.createdDate = (createdDate != null) ? createdDate : new Date();
-		this.user = user;
-		this.category = category;
-	}
-
-	// Getters and Setters
 	public String getVideoId() {
 		return videoId;
 	}

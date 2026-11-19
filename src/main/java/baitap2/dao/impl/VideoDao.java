@@ -92,7 +92,7 @@ public class VideoDao implements IVideoDao {
 	public List<Video> findTop10Latest() {
 		EntityManager enma = JPAConfig.getEntityManager();
 		try {
-			String jpql = "SELECT v FROM Video v WHERE v.active = 1 ORDER BY v.createdDate DESC";
+			String jpql = "SELECT v FROM Video v LEFT JOIN FETCH v.user WHERE v.active = 1 ORDER BY v.createdDate DESC";
 			TypedQuery<Video> query = enma.createQuery(jpql, Video.class);
 			query.setMaxResults(10); // Giới hạn đúng 10 video
 			return query.getResultList();

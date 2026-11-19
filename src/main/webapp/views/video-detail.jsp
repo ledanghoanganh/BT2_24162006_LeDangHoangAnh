@@ -17,20 +17,6 @@ body {
 	font-family: Arial, sans-serif;
 }
 
-.top-navbar {
-	background-color: #0099e6;
-	color: white;
-	padding: 12px 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.top-navbar a {
-	color: white;
-	text-decoration: none;
-}
-
 .player-container {
 	background: #000;
 	border-radius: 8px;
@@ -56,25 +42,7 @@ video {
 </head>
 <body>
 
-	<div class="top-navbar">
-		<div>
-			<a href="<c:url value='/home'/>"
-				style="font-size: 18px; font-weight: bold;"> <i
-				class="fa fa-shopping-bag"></i> Trang chủ
-			</a> <span style="margin: 0 10px;">|</span> <a
-				href="<c:url value='/video'/>"
-				style="font-size: 16px; font-weight: 500;"> <i
-				class="fa fa-video-camera"></i> Kênh Video (/video)
-			</a>
-		</div>
-		<div>
-			<a href="<c:url value='/home'/>" class="btn btn-sm btn-default">
-				<i class="fa fa-arrow-left"></i> Quay lại Trang chủ
-			</a>
-		</div>
-	</div>
-
-	<div class="container" style="margin-top: 25px; max-width: 960px;">
+	<div class="container" style="margin-top: 15px; max-width: 960px;">
 		<!-- KHUNG TRÌNH PHÁT VIDEO HTML5 -->
 		<div class="player-container">
 			<c:choose>

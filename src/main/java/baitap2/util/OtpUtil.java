@@ -2,6 +2,9 @@ package baitap2.util;
 
 import java.util.Random;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class OtpUtil {
     public static String generateOTP() {
         Random random = new Random();

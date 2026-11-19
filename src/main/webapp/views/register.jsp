@@ -180,11 +180,11 @@ function validateRegister() {
 			</section>
 
 			<button type="submit" class="btn btn-register btn-block">Tạo tài khoản</button>
-		</form>
-	</div>
 
-	<div class="login-link">
-		Nếu bạn đã có tài khoản? <a href="<c:url value='/login'/>">Đăng nhập</a>
+			<div class="login-link" style="margin-top: 15px; text-align: center;">
+				Nếu bạn đã có tài khoản? <a href="<c:url value='/login'/>">Đăng nhập</a>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

@@ -13,6 +13,7 @@ import java.io.IOException;
 import baitap2.entity.User;
 import baitap2.service.IUserService;
 import baitap2.service.impl.UserServiceImpl;
+import baitap2.util.BeanValidator;
 import baitap2.config.Constant;
 
 @WebServlet(urlPatterns = "/login")
@@ -37,7 +38,7 @@ public class LoginController extends HttpServlet {
 					if (user != null && user.getStatus() == 1) {
 						session = req.getSession(true);
 						session.setAttribute("account", user);
-						session.setAttribute("username", user.getUserName());
+						session.setAttribute("username", user.getUsername());
 						resp.sendRedirect(req.getContextPath() + "/waiting");
 						return;
 					}
@@ -60,10 +61,20 @@ public class LoginController extends HttpServlet {
 			isRememberMe = true;
 		}
 
-		String alertMsg = "";
-		if (username.isEmpty() || password.isEmpty()) {
-			alertMsg = "Tài khoản hoặc mật khẩu không được rỗng";
-			req.setAttribute("alert", alertMsg);
+		// Backend Validation sử dụng BeanValidator trên Entity User
+		User userCheck = new User();
+		userCheck.setUsername(username != null ? username.trim() : "");
+		userCheck.setPassword(password != null ? password.trim() : "");
+
+		String usernameErr = BeanValidator.getPropertyError(userCheck, "username");
+		if (usernameErr != null) {
+			req.setAttribute("alert", usernameErr);
+			req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
+			return;
+		}
+		String passwordErr = BeanValidator.getPropertyError(userCheck, "password");
+		if (passwordErr != null) {
+			req.setAttribute("alert", passwordErr);
 			req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
 			return;
 		}
@@ -85,7 +96,7 @@ public class LoginController extends HttpServlet {
 			}
 			resp.sendRedirect(req.getContextPath() + "/waiting");
 		} else {
-			alertMsg = "Tài khoản hoặc mật khẩu không đúng";
+			String alertMsg = "Tài khoản hoặc mật khẩu không đúng";
 			req.setAttribute("alert", alertMsg);
 			req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
 		}

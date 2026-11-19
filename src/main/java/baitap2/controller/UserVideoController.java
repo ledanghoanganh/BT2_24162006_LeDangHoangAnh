@@ -16,6 +16,7 @@ import baitap2.service.IVideoService;
 import baitap2.service.impl.CategoryServiceImpl;
 import baitap2.service.impl.UserServiceImpl;
 import baitap2.service.impl.VideoServiceImpl;
+import baitap2.util.BeanValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -205,12 +206,21 @@ public class UserVideoController extends HttpServlet {
 
 			Video video = new Video();
 			video.setVideoId(videoId);
-			video.setTitle(title);
+			video.setTitle(title != null ? title.trim() : "");
 			video.setDescription(description);
 			video.setActive(1); // Mặc định hoạt động
 			video.setViews(0);
 			video.setCreatedDate(new Date());
 			video.setUser(loggedInUser); // Gán cho chính User đang đăng nhập
+
+			// Backend Entity Validation
+			String titleErr = BeanValidator.getPropertyError(video, "title");
+			if (titleErr != null) {
+				req.setAttribute("error", titleErr);
+				req.setAttribute("categories", categoryService.findAll());
+				req.getRequestDispatcher("/views/video-upload.jsp").forward(req, resp);
+				return;
+			}
 
 			if (categoryIdStr != null && !categoryIdStr.trim().isEmpty()) {
 				try {
@@ -273,8 +283,18 @@ public class UserVideoController extends HttpServlet {
 				Video video = videoService.findById(videoId.trim());
 				// Chỉ cho phép cập nhật nếu là chủ sở hữu video hoặc là Admin
 				if (video != null && ((video.getUser() != null && video.getUser().getId() == loggedInUser.getId()) || loggedInUser.getRoleid() == 1)) {
-					video.setTitle(title);
+					video.setTitle(title != null ? title.trim() : "");
 					video.setDescription(description);
+
+					// Backend Entity Validation
+					String titleErr = BeanValidator.getPropertyError(video, "title");
+					if (titleErr != null) {
+						req.setAttribute("error", titleErr);
+						req.setAttribute("video", video);
+						req.setAttribute("categories", categoryService.findAll());
+						req.getRequestDispatcher("/views/video-edit.jsp").forward(req, resp);
+						return;
+					}
 					// Giữ nguyên active và views, user không can thiệp trạng thái
 
 					if (categoryIdStr != null && !categoryIdStr.trim().isEmpty()) {

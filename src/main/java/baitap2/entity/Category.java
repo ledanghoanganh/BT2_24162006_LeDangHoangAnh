@@ -13,10 +13,23 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "categories")
 @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = "videos")
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +39,8 @@ public class Category implements Serializable {
 	private int categoryid;
 
 	@Column(name = "CategoryName", columnDefinition = "nvarchar(50) not null")
-	@NotEmpty(message = "Không được phép rỗng")
+	@NotEmpty(message = "Tên danh mục không được phép rỗng")
+	@Size(min = 2, max = 50, message = "Tên danh mục phải từ 2 đến 50 ký tự")
 	private String categoryname;
 
 	@Column(name = "Images", columnDefinition = "nvarchar(500) null")
@@ -37,12 +51,10 @@ public class Category implements Serializable {
 
 	// bi-directional many-to-one association to Video
 	@OneToMany(mappedBy = "category")
+	@Builder.Default
 	private List<Video> videos = new ArrayList<>();
 
-	// Constructors
-	public Category() {
-	}
-
+	// Convenience constructor
 	public Category(int categoryid, String categoryname, String images, int status) {
 		this.categoryid = categoryid;
 		this.categoryname = categoryname;
@@ -50,15 +62,6 @@ public class Category implements Serializable {
 		this.status = status;
 	}
 
-	public Category(int categoryid, String categoryname, String images, int status, List<Video> videos) {
-		this.categoryid = categoryid;
-		this.categoryname = categoryname;
-		this.images = images;
-		this.status = status;
-		this.videos = videos;
-	}
-
-	// Getters and Setters
 	public int getCategoryid() {
 		return categoryid;
 	}
@@ -137,13 +140,6 @@ public class Category implements Serializable {
 		if (getVideos() != null) {
 			getVideos().remove(video);
 		}
-		video.setCategory(null);
 		return video;
-	}
-
-	@Override
-	public String toString() {
-		return "Category [categoryid=" + categoryid + ", categoryname=" + categoryname + ", images=" + images
-				+ ", status=" + status + "]";
 	}
 }

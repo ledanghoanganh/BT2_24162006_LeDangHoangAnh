@@ -13,12 +13,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "users")
 @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = {"videos", "password"})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -27,15 +41,23 @@ public class User implements Serializable {
 	@Column(name = "id")
 	private int id;
 
+	@NotEmpty(message = "Email không được để trống")
+	@Email(message = "Email không đúng định dạng")
 	@Column(name = "email", length = 255)
 	private String email;
 
+	@NotEmpty(message = "Tên đăng nhập không được để trống")
+	@Size(min = 3, max = 50, message = "Tên đăng nhập từ 3 đến 50 ký tự")
 	@Column(name = "username", length = 255, nullable = false, unique = true)
 	private String username;
 
+	@NotEmpty(message = "Họ và tên không được để trống")
+	@Size(min = 2, max = 100, message = "Họ và tên từ 2 đến 100 ký tự")
 	@Column(name = "fullname", length = 255)
 	private String fullname;
 
+	@NotEmpty(message = "Mật khẩu không được để trống")
+	@Size(min = 6, message = "Mật khẩu phải từ 6 ký tự trở lên")
 	@Column(name = "password", length = 255, nullable = false)
 	private String password;
 
@@ -45,6 +67,7 @@ public class User implements Serializable {
 	@Column(name = "roleid")
 	private int roleid;
 
+	@Pattern(regexp = "^(0[0-9]{9})?$", message = "Số điện thoại không hợp lệ (10 chữ số bắt đầu bằng số 0)")
 	@Column(name = "phone", length = 50)
 	private String phone;
 
@@ -55,12 +78,10 @@ public class User implements Serializable {
 	private int status;
 
 	@OneToMany(mappedBy = "user")
+	@Builder.Default
 	private List<Video> videos = new ArrayList<>();
 
-	// Constructors
-	public User() {
-	}
-
+	// Convenience constructors
 	public User(String email, String username, String fullname, String password, String avatar, int roleid,
 			String phone, Date createddate, int status) {
 		this.email = email;
@@ -88,7 +109,6 @@ public class User implements Serializable {
 		this.status = status;
 	}
 
-	// Getters and Setters
 	public int getId() {
 		return id;
 	}
@@ -113,14 +133,6 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
-	public String getUserName() {
-		return username;
-	}
-
-	public void setUserName(String userName) {
-		this.username = userName;
-	}
-
 	public String getFullname() {
 		return fullname;
 	}
@@ -129,28 +141,12 @@ public class User implements Serializable {
 		this.fullname = fullname;
 	}
 
-	public String getFullName() {
-		return fullname;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullname = fullName;
-	}
-
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getPassWord() {
-		return password;
-	}
-
-	public void setPassWord(String passWord) {
-		this.password = passWord;
 	}
 
 	public String getAvatar() {
@@ -185,14 +181,6 @@ public class User implements Serializable {
 		this.createddate = createddate;
 	}
 
-	public Date getCreatedDate() {
-		return createddate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createddate = createdDate;
-	}
-
 	public int getStatus() {
 		return status;
 	}
@@ -207,11 +195,5 @@ public class User implements Serializable {
 
 	public void setVideos(List<Video> videos) {
 		this.videos = videos;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", username=" + username + ", fullname=" + fullname + ", avatar="
-				+ avatar + ", roleid=" + roleid + ", phone=" + phone + ", createddate=" + createddate + "]";
 	}
 }

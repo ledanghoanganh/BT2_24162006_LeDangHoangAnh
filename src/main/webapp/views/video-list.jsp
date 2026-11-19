@@ -16,20 +16,6 @@ body {
 	font-family: Arial, sans-serif;
 }
 
-.top-navbar {
-	background-color: #0099e6;
-	color: white;
-	padding: 12px 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.top-navbar a {
-	color: white;
-	text-decoration: none;
-}
-
 .content-box {
 	background: #fff;
 	padding: 25px;
@@ -81,35 +67,6 @@ body {
 </style>
 </head>
 <body>
-
-	<div class="top-navbar">
-		<div>
-			<a href="<c:url value='/home'/>"
-				style="font-size: 18px; font-weight: bold;"> <i
-				class="fa fa-shopping-bag"></i> Trang chủ
-			</a> <span style="margin: 0 10px;">|</span> <a
-				href="<c:url value='/video'/>"
-				style="font-size: 16px; font-weight: 500;"> <i
-				class="fa fa-video-camera"></i> Kênh Video (/video)
-			</a>
-		</div>
-		<div>
-			<c:choose>
-				<c:when test="${not empty sessionScope.account}">
-					<span>Xin chào: <strong>${sessionScope.account.fullname}</strong></span>
-					<a href="<c:url value='/logout'/>" class="btn btn-sm btn-danger"
-						style="margin-left: 10px; color: white;"> <i
-						class="fa fa-sign-out"></i> Đăng xuất
-					</a>
-				</c:when>
-				<c:otherwise>
-					<a href="<c:url value='/login'/>" class="btn btn-sm btn-warning"
-						style="color: white;"> <i class="fa fa-sign-in"></i> Đăng nhập
-					</a>
-				</c:otherwise>
-			</c:choose>
-		</div>
-	</div>
 
 	<div class="container content-box">
 		<div
