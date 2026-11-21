@@ -26,6 +26,12 @@ public class EmailUtil {
         final String password = EmailConfig.getPassword();
         String senderName = EmailConfig.getSenderName();
 
+        if (host == null || host.trim().isEmpty() || fromEmail == null || fromEmail.trim().isEmpty()) {
+            System.err.println("[EMAIL SENDER] Lỗi: Chưa cấu hình SMTP_HOST hoặc SMTP_FROM_EMAIL trong file .env!");
+            System.err.println("[EMAIL SENDER] Bạn có thể xem mã OTP được in ở log phía trên để test.");
+            return false;
+        }
+
         Properties props = new Properties();
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", port);

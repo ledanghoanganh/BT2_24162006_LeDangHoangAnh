@@ -167,4 +167,19 @@ public class UserDao implements IUserDao {
 		}
 	}
 
+	@Override
+	public boolean checkExistEmailExceptUser(String email, int userId) {
+		EntityManager enma = JPAConfig.getEntityManager();
+		try {
+			String jpql = "SELECT count(u) FROM User u WHERE u.email = :email AND u.id != :userId";
+			Query query = enma.createQuery(jpql);
+			query.setParameter("email", email);
+			query.setParameter("userId", userId);
+			long count = (long) query.getSingleResult();
+			return count > 0;
+		} finally {
+			enma.close();
+		}
+	}
+
 }

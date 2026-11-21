@@ -26,4 +26,6 @@ public interface IUserDao {
 	User findByEmail(String email);
 
 	User findByUsernameOrEmail(String keyword);
+
+	boolean checkExistEmailExceptUser(String email, int userId);
 }

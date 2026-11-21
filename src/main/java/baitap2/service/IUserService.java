@@ -35,4 +35,9 @@ public interface IUserService {
 
 	boolean updatePassword(String username, String newPassword);
 
+	boolean checkExistEmailExceptUser(String email, int userId);
+
+	User updateProfile(int userId, String fullname, String phone, String avatar);
+
+	User updateProfileWithEmail(int userId, String fullname, String phone, String newEmail, String avatar);
 }

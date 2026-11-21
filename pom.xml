@@ -129,6 +129,15 @@
 			<artifactId>sitemesh-webfilter</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+
+		<!-- 5. Cloudinary Java SDK (Hỗ trợ upload ảnh/video lên Cloudinary qua
+		Multipart) -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.36.0</version>
+		</dependency>
+
 	</dependencies>
 
 

@@ -119,4 +119,39 @@ public class UserServiceImpl implements IUserService {
 	public List<User> findAll() {
 		return userDao.findAll();
 	}
+
+	@Override
+	public boolean checkExistEmailExceptUser(String email, int userId) {
+		return userDao.checkExistEmailExceptUser(email, userId);
+	}
+
+	@Override
+	public User updateProfile(int userId, String fullname, String phone, String avatar) {
+		User user = userDao.findById(userId);
+		if (user != null) {
+			user.setFullname(fullname);
+			user.setPhone(phone);
+			if (avatar != null) {
+				user.setAvatar(avatar);
+			}
+			userDao.update(user);
+			return user;
+		}
+		return null;
+	}
+
+	public User updateProfileWithEmail(int userId, String fullname, String phone, String newEmail, String avatar) {
+		User user = userDao.findById(userId);
+		if (user != null) {
+			user.setFullname(fullname);
+			user.setPhone(phone);
+			user.setEmail(newEmail);
+			if (avatar != null) {
+				user.setAvatar(avatar);
+			}
+			userDao.update(user);
+			return user;
+		}
+		return null;
+	}
 }

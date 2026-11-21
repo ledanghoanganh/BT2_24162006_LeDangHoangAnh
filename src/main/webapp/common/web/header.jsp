@@ -46,9 +46,15 @@
                                 </div>
                             </li>
                             <li><hr class="dropdown-divider"></li>
+                            <!-- BỔ SUNG MỤC PROFILE VÀO ĐÂY: -->
+                            <li>
+                                <a class="dropdown-item" href="${ctx}/profile">
+                                    <i class="fa fa-id-card me-2 text-primary"></i> Hồ sơ cá nhân
+                                </a>
+                            </li>
                             <li>
                                 <a class="dropdown-item" href="${ctx}/video">
-                                    <i class="fa fa-film me-2 text-primary"></i> Video của tôi
+                                    <i class="fa fa-film me-2 text-secondary"></i> Video của tôi
                                 </a>
                             </li>
                             <li>
